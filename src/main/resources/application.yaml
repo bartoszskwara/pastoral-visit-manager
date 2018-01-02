@@ -1,0 +1,27 @@
+debug: true
+
+spring:
+  jpa:
+    hibernate:
+      ddlAuto: validate
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pastoraldb
+    username: postgres
+    password: postgres
+
+server:
+  port: 8090
+
+security:
+  ignored: /**
+
+oauth2security:
+  client:
+    id: pastoral
+    secret: thepastoralsecret
+  resource:
+    id: resource
+  expiration: 864000000
+  jwt:
+    secret: pastoralJWTSecret

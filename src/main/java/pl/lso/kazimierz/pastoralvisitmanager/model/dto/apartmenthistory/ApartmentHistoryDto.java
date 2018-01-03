@@ -2,6 +2,7 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartmenthistory;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
+
 import java.util.Date;
 
 public class ApartmentHistoryDto {

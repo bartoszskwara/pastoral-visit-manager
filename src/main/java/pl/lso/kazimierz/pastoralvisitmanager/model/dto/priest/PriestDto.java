@@ -1,6 +1,7 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.dto.priest;
 
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitDto;
+
 import java.util.Set;
 
 public class PriestDto {

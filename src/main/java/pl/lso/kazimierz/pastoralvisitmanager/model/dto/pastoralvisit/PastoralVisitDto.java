@@ -3,6 +3,7 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.priest.PriestDto;
+
 import java.util.Date;
 
 public class PastoralVisitDto {

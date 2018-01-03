@@ -1,6 +1,7 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.dto.address;
 
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
+
 import java.util.Set;
 
 public class AddressDto {

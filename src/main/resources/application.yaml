@@ -15,13 +15,3 @@ server:
 
 security:
   ignored: /**
-
-oauth2security:
-  client:
-    id: pastoral
-    secret: thepastoralsecret
-  resource:
-    id: resource
-  expiration: 864000000
-  jwt:
-    secret: pastoralJWTSecret

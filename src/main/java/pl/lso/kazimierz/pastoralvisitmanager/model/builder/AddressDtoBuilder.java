@@ -3,18 +3,18 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.builder;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddressDtoBuilder {
 
     private Long id;
     private String streetName;
     private Integer blockNumber;
-    private Set<ApartmentDto> apartments;
+    private List<ApartmentDto> apartments;
 
     public AddressDtoBuilder() {
-        apartments = new HashSet<>();
+        apartments = new ArrayList<>();
     }
 
     public static AddressDtoBuilder getInstance() {
@@ -36,14 +36,14 @@ public class AddressDtoBuilder {
         return this;
     }
 
-    public AddressDtoBuilder withApartments(Set<ApartmentDto> apartments) {
+    public AddressDtoBuilder withApartments(List<ApartmentDto> apartments) {
         this.apartments = apartments;
         return this;
     }
 
     public AddressDtoBuilder withApartment(ApartmentDto apartment) {
         if(this.apartments == null) {
-            this.apartments = new HashSet<>();
+            this.apartments = new ArrayList<>();
         }
         this.apartments.add(apartment);
         return this;

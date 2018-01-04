@@ -1,11 +1,13 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartmenthistory.ApartmentHistoryDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitDto;
 
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApartmentDto {
     private Long id;
     private Integer number;

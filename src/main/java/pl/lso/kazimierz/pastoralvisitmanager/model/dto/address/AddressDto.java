@@ -3,16 +3,16 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.dto.address;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
 
-import java.util.Set;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDto {
     private Long id;
     private String streetName;
     private Integer blockNumber;
-    private Set<ApartmentDto> apartments;
+    private List<ApartmentDto> apartments;
 
-    public AddressDto(Long id, String streetName, Integer blockNumber, Set<ApartmentDto> apartments) {
+    public AddressDto(Long id, String streetName, Integer blockNumber, List<ApartmentDto> apartments) {
         this.id = id;
         this.streetName = streetName;
         this.blockNumber = blockNumber;
@@ -31,7 +31,7 @@ public class AddressDto {
         return blockNumber;
     }
 
-    public Set<ApartmentDto> getApartments() {
+    public List<ApartmentDto> getApartments() {
         return apartments;
     }
 }

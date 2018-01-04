@@ -1,11 +1,13 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.priest.PriestDto;
 
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PastoralVisitDto {
     private Long id;
     private String value;

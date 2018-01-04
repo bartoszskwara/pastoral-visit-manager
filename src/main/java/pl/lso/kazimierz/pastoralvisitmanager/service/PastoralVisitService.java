@@ -1,7 +1,6 @@
 package pl.lso.kazimierz.pastoralvisitmanager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.exception.NotFoundException;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.NewPastoralVisit;

@@ -1,19 +1,16 @@
 package pl.lso.kazimierz.pastoralvisitmanager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import pl.lso.kazimierz.pastoralvisitmanager.model.builder.AddressDtoBuilder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.lso.kazimierz.pastoralvisitmanager.model.builder.ApartmentDtoBuilder;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddress;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.NewApartment;
-import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
-import pl.lso.kazimierz.pastoralvisitmanager.service.AddressService;
 import pl.lso.kazimierz.pastoralvisitmanager.service.ApartmentService;
 
 import java.util.HashMap;

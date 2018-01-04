@@ -11,6 +11,7 @@ import pl.lso.kazimierz.pastoralvisitmanager.model.builder.PastoralVisitDtoBuild
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddress;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.NewApartment;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
@@ -29,10 +30,27 @@ import java.util.stream.Collectors;
 public class ApartmentService {
 
     private ApartmentRepository apartmentRepository;
+    private AddressRepository addressRepository;
 
     @Autowired
-    public ApartmentService(ApartmentRepository apartmentRepository) {
+    public ApartmentService(ApartmentRepository apartmentRepository,
+                            AddressRepository addressRepository) {
         this.apartmentRepository = apartmentRepository;
+        this.addressRepository = addressRepository;
     }
 
+    public Apartment addNewApartment(NewApartment newApartment) {
+        if(newApartment == null) {
+            throw new NotFoundException("Apartment data not found");
+        }
+        Address address = addressRepository.findOne(newApartment.getAddressId());
+        if(address == null) {
+            throw new NotFoundException("Address not found");
+        }
+
+        Apartment apartment = new Apartment();
+        apartment.setNumber(newApartment.getNumber());
+        apartment.setAddress(address);
+        return apartmentRepository.save(apartment);
+    }
 }

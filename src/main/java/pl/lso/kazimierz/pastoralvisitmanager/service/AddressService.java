@@ -30,8 +30,8 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public Page<Address> getAllAddresses(Pageable pageable) {
-        return addressRepository.findAll(pageable);
+    public Page<Address> getAllAddressesOrByName(Pageable pageable, String streetName) {
+        return addressRepository.findByStreetNameContainingIgnoreCase(pageable, streetName);
     }
 
     public AddressDto getAddressDetails(Long addressId) {

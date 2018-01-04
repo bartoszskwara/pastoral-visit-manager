@@ -6,5 +6,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 
 public interface AddressRepository extends PagingAndSortingRepository<Address, Long> {
-    Page<Address> findAll(Pageable pageable);
+    Page<Address> findByStreetNameContainingIgnoreCase(Pageable pageable, String streetName);
 }

@@ -10,12 +10,12 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApartmentDto {
     private Long id;
-    private Integer number;
+    private String number;
     private AddressDto address;
     private Set<ApartmentHistoryDto> apartmentHistories;
     private Set<PastoralVisitDto> pastoralVisits;
 
-    public ApartmentDto(Long id, Integer number, AddressDto address, Set<ApartmentHistoryDto> apartmentHistories, Set<PastoralVisitDto> pastoralVisits) {
+    public ApartmentDto(Long id, String number, AddressDto address, Set<ApartmentHistoryDto> apartmentHistories, Set<PastoralVisitDto> pastoralVisits) {
         this.id = id;
         this.number = number;
         this.address = address;
@@ -27,7 +27,7 @@ public class ApartmentDto {
         return id;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 

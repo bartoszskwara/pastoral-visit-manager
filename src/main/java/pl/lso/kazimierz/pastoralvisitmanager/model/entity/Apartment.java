@@ -14,7 +14,7 @@ public class Apartment {
     private Long id;
 
     @Column(nullable = false, name = "number")
-    private Integer number;
+    private String number;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id", nullable = false)
@@ -34,11 +34,11 @@ public class Apartment {
         this.id = id;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

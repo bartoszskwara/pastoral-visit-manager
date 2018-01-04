@@ -9,12 +9,16 @@ import pl.lso.kazimierz.pastoralvisitmanager.model.builder.AddressDtoBuilder;
 import pl.lso.kazimierz.pastoralvisitmanager.model.builder.ApartmentDtoBuilder;
 import pl.lso.kazimierz.pastoralvisitmanager.model.builder.PastoralVisitDtoBuilder;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddress;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
+import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
 
+import javax.transaction.Transactional;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -70,5 +74,36 @@ public class AddressService {
                 .withBlockNumber(address.getBlockNumber())
                 .withApartments(apartmentList)
                 .build();
+    }
+
+    @Transactional
+    public Address addNewAddress(NewAddress newAddress) {
+        if(newAddress == null) {
+            throw new NotFoundException("Address data not found");
+        }
+
+        Address address = new Address();
+        address.setStreetName(newAddress.getStreetName());
+        address.setBlockNumber(newAddress.getBlockNumber());
+
+        Set<Apartment> apartments = new HashSet<>();
+        for(int i = newAddress.getApartmentsFrom(); i <= newAddress.getApartmentsTo(); i++) {
+            if(!newAddress.getExcluded().contains(i)) {
+                Apartment apartment = new Apartment();
+                apartment.setNumber(String.valueOf(i));
+                apartment.setAddress(address);
+                apartments.add(apartment);
+            }
+        }
+
+        for(String i : newAddress.getIncluded()) {
+            Apartment apartment = new Apartment();
+            apartment.setNumber(String.valueOf(i));
+            apartment.setAddress(address);
+            apartments.add(apartment);
+        }
+
+        address.setApartments(apartments);
+        return addressRepository.save(address);
     }
 }

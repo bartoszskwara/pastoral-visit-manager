@@ -7,4 +7,6 @@ import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 
 public interface AddressRepository extends PagingAndSortingRepository<Address, Long> {
     Page<Address> findByStreetNameContainingIgnoreCase(Pageable pageable, String streetName);
+
+    Address findByStreetNameIgnoreCaseAndBlockNumberIgnoreCase(String streetName, String blockNumber);
 }

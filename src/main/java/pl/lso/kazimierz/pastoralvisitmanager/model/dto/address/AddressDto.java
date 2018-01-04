@@ -9,10 +9,10 @@ import java.util.List;
 public class AddressDto {
     private Long id;
     private String streetName;
-    private Integer blockNumber;
+    private String blockNumber;
     private List<ApartmentDto> apartments;
 
-    public AddressDto(Long id, String streetName, Integer blockNumber, List<ApartmentDto> apartments) {
+    public AddressDto(Long id, String streetName, String blockNumber, List<ApartmentDto> apartments) {
         this.id = id;
         this.streetName = streetName;
         this.blockNumber = blockNumber;
@@ -27,7 +27,7 @@ public class AddressDto {
         return streetName;
     }
 
-    public Integer getBlockNumber() {
+    public String getBlockNumber() {
         return blockNumber;
     }
 

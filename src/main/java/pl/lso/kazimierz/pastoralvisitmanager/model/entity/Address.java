@@ -17,7 +17,7 @@ public class Address {
     private String streetName;
 
     @Column(nullable = false, name = "block_number")
-    private Integer blockNumber;
+    private String blockNumber;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
     private Set<Apartment> apartments = new HashSet<>();
@@ -38,11 +38,11 @@ public class Address {
         this.streetName = streetName;
     }
 
-    public Integer getBlockNumber() {
+    public String getBlockNumber() {
         return blockNumber;
     }
 
-    public void setBlockNumber(Integer blockNumber) {
+    public void setBlockNumber(String blockNumber) {
         this.blockNumber = blockNumber;
     }
 

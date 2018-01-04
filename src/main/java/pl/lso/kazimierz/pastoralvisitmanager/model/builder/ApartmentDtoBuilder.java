@@ -11,7 +11,7 @@ import java.util.Set;
 public class ApartmentDtoBuilder {
 
     private Long id;
-    private Integer number;
+    private String number;
     private AddressDto address;
     private Set<ApartmentHistoryDto> apartmentHistories;
     private Set<PastoralVisitDto> pastoralVisits;
@@ -30,7 +30,7 @@ public class ApartmentDtoBuilder {
         return this;
     }
 
-    public ApartmentDtoBuilder withNumber(Integer number) {
+    public ApartmentDtoBuilder withNumber(String number) {
         this.number = number;
         return this;
     }

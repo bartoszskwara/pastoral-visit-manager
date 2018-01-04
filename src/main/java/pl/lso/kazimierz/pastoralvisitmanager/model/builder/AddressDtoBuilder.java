@@ -10,7 +10,7 @@ public class AddressDtoBuilder {
 
     private Long id;
     private String streetName;
-    private Integer blockNumber;
+    private String blockNumber;
     private List<ApartmentDto> apartments;
 
     public AddressDtoBuilder() {
@@ -31,7 +31,7 @@ public class AddressDtoBuilder {
         return this;
     }
 
-    public AddressDtoBuilder withBlockNumber(Integer blockNumber) {
+    public AddressDtoBuilder withBlockNumber(String blockNumber) {
         this.blockNumber = blockNumber;
         return this;
     }

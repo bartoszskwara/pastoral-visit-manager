@@ -2,6 +2,7 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.builder;
 
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartmenthistory.ApartmentHistoryDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.entity.ApartmentHistory;
 
 import java.util.Date;
 
@@ -36,6 +37,20 @@ public class ApartmentHistoryDtoBuilder {
     public ApartmentHistoryDtoBuilder withApartment(ApartmentDto apartment) {
         this.apartment = apartment;
         return this;
+    }
+
+    public static ApartmentHistoryDto buildFromEntity(ApartmentHistory apartmentHistory) {
+        ApartmentDto apartment = ApartmentDtoBuilder.getInstance()
+                .withId(apartmentHistory.getApartment().getId())
+                .withPastoralVisits(null)
+                .withApartmentHistories(null)
+                .build();
+        return ApartmentHistoryDtoBuilder.getInstance()
+                .withId(apartmentHistory.getId())
+                .withDate(apartmentHistory.getDate())
+                .withComment(apartmentHistory.getComment())
+                .withApartment(apartment)
+                .build();
     }
 
     public ApartmentHistoryDto build() {

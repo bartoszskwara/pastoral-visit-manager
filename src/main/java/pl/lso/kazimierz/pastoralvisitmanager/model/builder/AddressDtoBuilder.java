@@ -2,9 +2,12 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.builder;
 
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AddressDtoBuilder {
 
@@ -47,6 +50,24 @@ public class AddressDtoBuilder {
         }
         this.apartments.add(apartment);
         return this;
+    }
+
+    public static AddressDto buildFromEntity(Address address) {
+        List<ApartmentDto> apartments = address.getApartments().stream()
+                .map(a -> ApartmentDtoBuilder.getInstance()
+                        .withId(a.getId())
+                        .withNumber(a.getNumber())
+                        .withPastoralVisits(null)
+                        .withApartmentHistories(null)
+                        .build())
+                .collect(Collectors.toList());
+
+        return AddressDtoBuilder.getInstance()
+                .withId(address.getId())
+                .withStreetName(address.getStreetName())
+                .withBlockNumber(address.getBlockNumber())
+                .withApartments(apartments)
+                .build();
     }
 
     public AddressDto build() {

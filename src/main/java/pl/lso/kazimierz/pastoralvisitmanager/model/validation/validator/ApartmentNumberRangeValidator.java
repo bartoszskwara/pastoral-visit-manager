@@ -18,7 +18,7 @@ public class ApartmentNumberRangeValidator implements ConstraintValidator<Apartm
         if(newAddress == null) {
             return false;
         }
-        if(newAddress.getApartmentsFrom().compareTo(newAddress.getApartmentsTo()) <= 0) {
+        if(newAddress.getApartmentsFrom() != null && newAddress.getApartmentsTo() != null && newAddress.getApartmentsFrom().compareTo(newAddress.getApartmentsTo()) <= 0) {
             return true;
         }
         else {

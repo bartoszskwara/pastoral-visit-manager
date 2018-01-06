@@ -2,7 +2,7 @@
 
 Trello (TODO tasks): https://trello.com/b/RYXTHF8z/pastoral-visit-manager
 
-###1. Requirements
+### 1. Requirements
 1. Java 8+
 2. Maven 3.5+
 3. Node 8.6.0+ https://nodejs.org/en/
@@ -10,7 +10,7 @@ Trello (TODO tasks): https://trello.com/b/RYXTHF8z/pastoral-visit-manager
 5. Angular Cli 1.6.1+
 6. PostgreSQL 10
 
-###2. Preparation
+### 2. Preparation
 
 Maven: https://maven.apache.org/download.cgi
 
@@ -24,7 +24,7 @@ PostgreSQL Server:
 1. Download and install postgres server
 2. Go to Task Manager > Services > find postgres-x64-10 > Run (if not runnning)
 
-###3. Installation
+### 3. Installation
 1. Clone the repository
 2. Import project into InteliJ IDEA (from existing sources > as Maven > next, next)
 3. Find PastoralVisitManagerApplication class and run it

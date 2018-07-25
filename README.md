@@ -23,6 +23,7 @@ Angular Cli:
 PostgreSQL Server:
 1. Download and install postgres server
 2. Go to Task Manager > Services > find postgres-x64-10 > Run (if not runnning)
+3. Create database called 'pastoraldb' and make sure there is an user called 'postgres' with password 'postgres' who has access to the database
 
 ### 3. Installation
 1. Clone the repository

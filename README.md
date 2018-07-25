@@ -1,4 +1,4 @@
-# Pastoral Visit Manager 2.0
+# Pastoral Visit Manager 2.5
 
 Trello (TODO tasks): https://trello.com/b/RYXTHF8z/pastoral-visit-manager
 

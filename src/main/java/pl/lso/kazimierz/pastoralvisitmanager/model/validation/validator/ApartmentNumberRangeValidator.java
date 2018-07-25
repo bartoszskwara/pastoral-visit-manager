@@ -1,24 +1,24 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.validation.validator;
 
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddress;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.validation.annotation.ApartmentNumbersRange;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class ApartmentNumberRangeValidator implements ConstraintValidator<ApartmentNumbersRange, NewAddress> {
+public class ApartmentNumberRangeValidator implements ConstraintValidator<ApartmentNumbersRange, NewAddressDto> {
 
     @Override
     public void initialize(ApartmentNumbersRange apartmentNumbersRange) {
     }
 
     @Override
-    public boolean isValid(NewAddress newAddress, ConstraintValidatorContext ctx) {
+    public boolean isValid(NewAddressDto newAddressDto, ConstraintValidatorContext ctx) {
 
-        if(newAddress == null) {
+        if(newAddressDto == null) {
             return false;
         }
-        if(newAddress.getApartmentsFrom() != null && newAddress.getApartmentsTo() != null && newAddress.getApartmentsFrom().compareTo(newAddress.getApartmentsTo()) <= 0) {
+        if(newAddressDto.getApartmentsFrom() != null && newAddressDto.getApartmentsTo() != null && newAddressDto.getApartmentsFrom().compareTo(newAddressDto.getApartmentsTo()) <= 0) {
             return true;
         }
         else {

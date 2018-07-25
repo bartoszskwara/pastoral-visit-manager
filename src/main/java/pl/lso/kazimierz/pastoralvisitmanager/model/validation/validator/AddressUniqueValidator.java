@@ -1,13 +1,13 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.validation.validator;
 
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddress;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.validation.annotation.AddressUnique;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class AddressUniqueValidator implements ConstraintValidator<AddressUnique, NewAddress> {
+public class AddressUniqueValidator implements ConstraintValidator<AddressUnique, NewAddressDto> {
 
     private AddressRepository addressRepository;
 
@@ -20,12 +20,12 @@ public class AddressUniqueValidator implements ConstraintValidator<AddressUnique
     }
 
     @Override
-    public boolean isValid(NewAddress newAddress, ConstraintValidatorContext ctx) {
+    public boolean isValid(NewAddressDto newAddressDto, ConstraintValidatorContext ctx) {
 
-        if(newAddress == null) {
+        if(newAddressDto == null) {
             return false;
         }
-        if(addressRepository.findByStreetNameIgnoreCaseAndBlockNumberIgnoreCase(newAddress.getStreetName(), newAddress.getBlockNumber()) == null) {
+        if(addressRepository.findByStreetNameIgnoreCaseAndBlockNumberIgnoreCase(newAddressDto.getStreetName(), newAddressDto.getBlockNumber()) == null) {
             return true;
         }
         else {

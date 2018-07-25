@@ -1,5 +1,6 @@
 target/
 frontend/node_modules/
+src/main/resources/*.csv
 
 # Compiled class file
 *.class

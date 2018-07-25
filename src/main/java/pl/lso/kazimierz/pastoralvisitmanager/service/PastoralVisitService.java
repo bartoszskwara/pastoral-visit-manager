@@ -3,13 +3,16 @@ package pl.lso.kazimierz.pastoralvisitmanager.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.exception.NotFoundException;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.NewPastoralVisit;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.PastoralVisit;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Priest;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.PastoralVisitRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.PriestRepository;
+
+import java.util.Optional;
 
 
 @Service
@@ -28,50 +31,35 @@ public class PastoralVisitService {
         this.priestRepository = priestRepository;
     }
 
-    public PastoralVisit addNewPastoralVisit(NewPastoralVisit newPastoralVisit) {
-        if(newPastoralVisit == null) {
+    public PastoralVisit savePastoralVisit(PastoralVisitDto pastoralVisitDto) {
+        if(pastoralVisitDto == null) {
             throw new NotFoundException("Pastoral visit data not found");
         }
-        Apartment apartment = apartmentRepository.findOne(newPastoralVisit.getApartmentId());
-        if(apartment == null) {
-            throw  new NotFoundException("Apartment not found");
+        Optional<Apartment> apartment = apartmentRepository.findById(pastoralVisitDto.getApartmentId());
+        if(!apartment.isPresent()) {
+            throw new NotFoundException("Apartment not found");
         }
-        Priest priest = priestRepository.findOne(newPastoralVisit.getPriestId());
-        if(priest == null) {
-            throw  new NotFoundException("Priest not found");
+        Optional<Priest> priest = priestRepository.findById(pastoralVisitDto.getPriestId());
+        if(!priest.isPresent()) {
+            throw new NotFoundException("Priest not found");
         }
 
-        PastoralVisit pastoralVisit = new PastoralVisit();
-        pastoralVisit.setDate(newPastoralVisit.getDate());
-        pastoralVisit.setValue(newPastoralVisit.getValue());
-        pastoralVisit.setApartment(apartment);
-        pastoralVisit.setPriest(priest);
-        return pastoralVisitRepository.save(pastoralVisit);
+        Optional<PastoralVisit> pastoralVisit = pastoralVisitRepository.findById(pastoralVisitDto.getId());
+        if(pastoralVisit.isPresent()) {
+            pastoralVisit.get().setValue(mapStatus(pastoralVisitDto.getValue()));
+            return pastoralVisitRepository.save(pastoralVisit.get());
+        }
+
+        PastoralVisit newPastoralVisit = new PastoralVisit();
+        newPastoralVisit.setDate(pastoralVisitDto.getDate());
+        newPastoralVisit.setValue(mapStatus(pastoralVisitDto.getValue()));
+        newPastoralVisit.setApartment(apartment.get());
+        newPastoralVisit.setPriest(priest.get());
+        return pastoralVisitRepository.save(newPastoralVisit);
     }
 
-    public PastoralVisit updatePastoralVisit(Long id, NewPastoralVisit newPastoralVisit) {
-        if(newPastoralVisit == null) {
-            throw new NotFoundException("Pastoral visit data not found");
-        }
-        PastoralVisit pastoralVisit = pastoralVisitRepository.findOne(id);
-        if(pastoralVisit == null) {
-            throw  new NotFoundException("Pastoral visit not found");
-        }
-        Apartment apartment = apartmentRepository.findOne(newPastoralVisit.getApartmentId());
-        if(apartment == null) {
-            throw  new NotFoundException("Apartment not found");
-        }
-        Priest priest = priestRepository.findOne(newPastoralVisit.getPriestId());
-        if(priest == null) {
-            throw  new NotFoundException("Priest not found");
-        }
-
-        pastoralVisit.setDate(newPastoralVisit.getDate());
-        pastoralVisit.setValue(newPastoralVisit.getValue());
-        pastoralVisit.setApartment(apartment);
-        pastoralVisit.setPriest(priest);
-
-        return pastoralVisitRepository.save(pastoralVisit);
+    private String mapStatus(String value) {
+        PastoralVisitStatus status = PastoralVisitStatus.getByName(value);
+        return status != null ? status.getStatus() : PastoralVisitStatus.not_requested.getStatus();
     }
-
 }

@@ -1,9 +1,21 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.entity;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.Data;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
 @Entity
 @Table(schema = "public", name = "apartment")
 public class Apartment {
@@ -21,48 +33,8 @@ public class Apartment {
     private Address address;
 
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
-    private Set<ApartmentHistory> apartmentHistories = new HashSet<>();
+    private List<ApartmentHistory> apartmentHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
-    private Set<PastoralVisit> pastoralVisits = new HashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Set<ApartmentHistory> getApartmentHistories() {
-        return apartmentHistories;
-    }
-
-    public void setApartmentHistories(Set<ApartmentHistory> apartmentHistories) {
-        this.apartmentHistories = apartmentHistories;
-    }
-
-    public Set<PastoralVisit> getPastoralVisits() {
-        return pastoralVisits;
-    }
-
-    public void setPastoralVisits(Set<PastoralVisit> pastoralVisits) {
-        this.pastoralVisits = pastoralVisits;
-    }
+    private List<PastoralVisit> pastoralVisits = new ArrayList<>();
 }

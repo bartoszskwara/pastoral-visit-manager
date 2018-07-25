@@ -2,45 +2,34 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment.ApartmentDto;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.priest.PriestDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PastoralVisitDto {
     private Long id;
-    private String value;
+
+    @NotNull(message = "Date cannot be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss Z")
     private Date date;
-    private ApartmentDto apartment;
-    private PriestDto priest;
 
-    public PastoralVisitDto(Long id, String value, Date date, ApartmentDto apartment, PriestDto priest) {
-        this.id = id;
-        this.value = value;
-        this.date = date;
-        this.apartment = apartment;
-        this.priest = priest;
-    }
+    @NotNull(message = "Value cannot be null")
+    @Size(min=1, message = "Value cannot be blank")
+    private String value;
 
-    public Long getId() {
-        return id;
-    }
+    @NotNull(message = "Apartment ID cannot be null")
+    private Long apartmentId;
 
-    public String getValue() {
-        return value;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public ApartmentDto getApartment() {
-        return apartment;
-    }
-
-    public PriestDto getPriest() {
-        return priest;
-    }
+    @NotNull(message = "Priest ID cannot be null")
+    private Long priestId;
 }

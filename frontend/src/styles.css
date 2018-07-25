@@ -1,17 +1,2 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
-@font-face {
-    font-family: "franklin";
-    src: url('assets/fonts/franklin.ttf') format("truetype");
-}
-
-p, body, html {
-  padding: 0;
-  margin: 0;
-}
-
-body {
-    background: rgba(16, 56, 119, 0.05);
-    font-family: 'franklin';
-}
+@import '~@angular/material/prebuilt-themes/pink-bluegrey.css';

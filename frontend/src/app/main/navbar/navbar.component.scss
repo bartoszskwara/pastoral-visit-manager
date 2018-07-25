@@ -1,0 +1,9 @@
+span {
+  margin: 10px;
+}
+
+mat-toolbar mat-toolbar-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

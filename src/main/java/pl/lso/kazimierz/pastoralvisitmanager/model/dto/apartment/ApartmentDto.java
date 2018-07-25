@@ -1,45 +1,18 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartment;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.apartmenthistory.ApartmentHistoryDto;
+import lombok.Builder;
+import lombok.Data;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitDto;
 
-import java.util.Set;
+import java.util.List;
 
+@Data
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApartmentDto {
     private Long id;
     private String number;
-    private AddressDto address;
-    private Set<ApartmentHistoryDto> apartmentHistories;
-    private Set<PastoralVisitDto> pastoralVisits;
-
-    public ApartmentDto(Long id, String number, AddressDto address, Set<ApartmentHistoryDto> apartmentHistories, Set<PastoralVisitDto> pastoralVisits) {
-        this.id = id;
-        this.number = number;
-        this.address = address;
-        this.apartmentHistories = apartmentHistories;
-        this.pastoralVisits = pastoralVisits;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public AddressDto getAddress() {
-        return address;
-    }
-
-    public Set<ApartmentHistoryDto> getApartmentHistories() {
-        return apartmentHistories;
-    }
-
-    public Set<PastoralVisitDto> getPastoralVisits() {
-        return pastoralVisits;
-    }
+    private List<PastoralVisitDto> pastoralVisits;
 }
+

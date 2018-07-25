@@ -1,9 +1,19 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.entity;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.Data;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
 @Entity
 @Table(schema = "public", name = "priest")
 public class Priest {
@@ -17,29 +27,5 @@ public class Priest {
     private String name;
 
     @OneToMany(mappedBy = "priest", cascade = CascadeType.ALL)
-    private Set<PastoralVisit> pastoralVisits = new HashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<PastoralVisit> getPastoralVisits() {
-        return pastoralVisits;
-    }
-
-    public void setPastoralVisits(Set<PastoralVisit> pastoralVisits) {
-        this.pastoralVisits = pastoralVisits;
-    }
+    private List<PastoralVisit> pastoralVisits = new ArrayList<>();
 }

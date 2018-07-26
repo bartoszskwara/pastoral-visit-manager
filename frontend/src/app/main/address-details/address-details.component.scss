@@ -13,10 +13,22 @@ $accent: mat-palette($mat-blue-gray, A400, A300, A600);
   background: mat-color($accent);
 }
 
+.loading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .address-container {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+}
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .address-data {
@@ -43,12 +55,18 @@ $accent: mat-palette($mat-blue-gray, A400, A300, A600);
 }
 
 .selected {
-  background: lightslategray;
+  background: lightslategray !important;
   color: rgba(255, 255, 255, 1);
 }
 
 table {
   width: 100%;
+
+  tr {
+    &:hover td {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
 }
 
 .back-box {

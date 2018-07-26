@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SimpleAddressDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.mapper.AddressMapper;
 import pl.lso.kazimierz.pastoralvisitmanager.service.AddressService;
 
@@ -38,8 +39,8 @@ public class AddressController {
 
     @GetMapping("/{id}")
     public ResponseEntity getAddressDetails(@PathVariable("id") Long id) {
-        AddressDto addressDto = addressService.getAddressDetails(id);
-        return ResponseEntity.ok(addressDto);
+        Address address = addressService.getAddress(id);
+        return ResponseEntity.ok(AddressMapper.map(address));
     }
 
     @PostMapping({"", "/"})

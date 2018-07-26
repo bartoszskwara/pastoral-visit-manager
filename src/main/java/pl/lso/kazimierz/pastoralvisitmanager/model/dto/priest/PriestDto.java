@@ -10,5 +10,4 @@ import java.util.List;
 public class PriestDto {
     private Long id;
     private String name;
-    private List<Long> pastoralVisits;
 }

@@ -10,6 +10,9 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
 
 import {InfiniteScrollModule} from "ngx-infinite-scroll";
 import {MomentModule} from 'ngx-moment';
@@ -21,6 +24,16 @@ import {HomeComponent} from './home/home.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {AddressDetailsComponent} from './address-details/address-details.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {SeasonService} from "./shared/service/season/season.service";
+import {AddressService} from "./address-details/service/address.service";
+import {PastoralVisitService} from "./address-details/service/pastoral-visit.service";
+import {PastoralVisitDialog} from "./address-details/pastoral-visit-dialog/pastoral-visit-dialog";
+import {FormsModule} from "@angular/forms";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {MatSelectModule} from '@angular/material/select';
+import {PriestService} from "./shared/service/priest/priest.service";
+import { ExportAddressComponent } from './export-address/export-address.component';
 
 @NgModule({
   imports: [
@@ -36,8 +49,17 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
     MatCardModule,
     MatExpansionModule,
     MomentModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatInputModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatSelectModule
   ],
-  declarations: [DashboardComponent, TestComponent, HomeComponent, NavbarComponent, AddressDetailsComponent, PageNotFoundComponent]
+  declarations: [DashboardComponent, TestComponent, HomeComponent, NavbarComponent, AddressDetailsComponent, PageNotFoundComponent, PastoralVisitDialog, ExportAddressComponent],
+  entryComponents: [PastoralVisitDialog],
+  providers: [AddressService, SeasonService, PastoralVisitService, PriestService]
 })
 export class MainModule { }

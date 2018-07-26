@@ -1,15 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Address} from "./model/Address";
-import {catchError} from "rxjs/internal/operators";
-import {Observable, of} from "rxjs/index";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpHeaders} from "@angular/common/http";
 import {Location} from "@angular/common/";
-import {environment} from "../../../../../frontend-old/src/environments/environment";
 import {Apartment} from "./model/Apartment";
 import * as moment from 'moment';
 import {PastoralVisit} from "./model/PastoralVisit";
 import {Season} from "./model/Season";
+import {SeasonService} from "../shared/service/season/season.service";
+import {AddressService} from "./service/address.service";
+import {PastoralVisitService} from "./service/pastoral-visit.service";
+import {EnvironmentService} from "../shared/service/environment/environment.service";
+import {Moment} from "moment";
+import {MatDialog} from "@angular/material";
+import {PastoralVisitDialog} from "./pastoral-visit-dialog/pastoral-visit-dialog";
+import {Priest} from "./model/Priest";
+import {PriestService} from "../shared/service/priest/priest.service";
 
 @Component({
   selector: 'address-details',
@@ -19,53 +25,92 @@ import {Season} from "./model/Season";
 export class AddressDetailsComponent implements OnInit {
 
   address: Address = null;
-  private loading: boolean;
-  private addressUrl = `${environment.server.url}` + "/address";
-  private pastoralVisitUrl = `${environment.server.url}` + "/pastoral-visit";
-  private seasonUrl = `${environment.server.url}` + "/season";
+  loading: boolean;
   displayedColumns: string[] = ['apartment', 'edit'];
-  private VISIT_COMPLETED_STATUS = ['+', 'ind.'];
-  private seasons: Season[] = [];
-  private LAST_SEASON: Season = null;
-  private dateFormat = "YYYY-MM-DD HH:mm:ss ZZ";
-  private edit: {
+  edit: {
     active: boolean;
     season: Season;
+    newPastoralVisit: {
+      priestId: number;
+      date: Moment;
+    }
   };
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private location: Location) {
+  seasons: Season[] = [];
+  priests: Priest[] = [];
+  menu: {
+    apartments: {
+      open: boolean;
+    }
+  };
+  private VISIT_COMPLETED_STATUS = [
+    this.env.pastoralVisitStatus().completed,
+    this.env.pastoralVisitStatus().individually
+  ];
+
+  constructor(private seasonService: SeasonService, private addressService: AddressService,
+              private pastoralVisitService: PastoralVisitService, public env: EnvironmentService,
+              private priestService: PriestService,
+              public dialog: MatDialog,
+              private route: ActivatedRoute, private router: Router, private location: Location) {
     this.loading = false;
     this.edit = {
       active: false,
-      season: null
-    }
+      season: null,
+      newPastoralVisit: {
+        priestId: null,
+        date: null
+      }
+    };
+    this.menu = {
+      apartments: {
+        open: false
+      }
+    };
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(
       params => this.getAddress(parseInt(params.get('id')))
     );
-    this.fetchSeasons()
+    console.log('aa1');
+    this.priestService.fetchPriests()
+      .subscribe(priests => {
+          this.priests = priests;
+        },
+        error => {
+          console.log('error');
+        },
+        () => {
+          console.log('aa2');
+        });
+    console.log('aa3');
+    this.seasonService.fetchSeasons()
       .subscribe(
         seasons => {
           this.seasons = seasons;
-          console.log(this.seasons);
+          this.sortSeasonsByEndDate(this.seasons);
         },
         error => {
-          console.log('error when fetching seasons');
           console.log(error);
         },
         () => {
-          this.LAST_SEASON = this.getLastSeason();
-          for(let season of this.seasons) {
-            this.displayedColumns.splice(1, 0, 'season'+season.name);
-          }
+          this.createSeasonColumns();
+          this.edit = {
+            active: false,
+            season: null,
+            newPastoralVisit: {
+              priestId: this.getCurrentLoggedPriestId(),
+              date: this.getCurrentDateIfInSeasonOrFirstInSeason()
+            }
+          };
         }
       );
+
   }
 
   private getAddress(id: number) : void {
     this.loading = true;
-    this.fetchAddress(id)
+    this.addressService.fetchAddress(id)
       .subscribe(
         address => {
           this.address = address;
@@ -76,24 +121,57 @@ export class AddressDetailsComponent implements OnInit {
         },
         () => {
           this.loading = false;
-          console.log('address fetching completed');
         });
   }
 
-  private fetchAddress(id: number): Observable<Address> {
-    return this.http.get<Address>(`${this.addressUrl}/${id}`)
-      .pipe(
-        catchError(this.handleError<Address>("get address details", new Address()))
-      );
+  openPastoralVisitDialog(apartment: Apartment, status: string, season: Season, startDate: Moment): void {
+    const dialogRef = this.dialog.open(PastoralVisitDialog, {
+      width: '250px',
+      data: {
+        priestId: this.edit.newPastoralVisit.priestId,
+        date: this.edit.newPastoralVisit.date,
+        startDate: startDate,
+        availablePriests: this.priests
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result == null) {
+        return;
+      }
+      this.edit.newPastoralVisit.priestId = result.priestId;
+      this.edit.newPastoralVisit.date = moment(result.date, this.env.dateFormat());
+
+      let pastoralVisit = {
+        id: null,
+        apartmentId: apartment.id,
+        date: this.edit.newPastoralVisit.date.hours(19).format(this.env.dateFormat()),
+        value: status,
+        priestId: this.edit.newPastoralVisit.priestId
+      };
+
+      this.pastoralVisitService.savePastoralVisit(pastoralVisit, this.getApplicationJsonHeaders())
+        .subscribe(
+          pastoralVisit => {
+            console.log('saved');
+            console.log(pastoralVisit);
+          },
+          error => {
+            console.log(error);
+          },
+          () => {
+            console.log('saving completed');
+            this.getAddress(this.address.id);
+            this.menu.apartments.open = true;
+          });
+    });
   }
 
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log('ERROR');
-      console.error(error);
-
-      return of(result as T);
-    };
+  private createSeasonColumns() {
+    for(let season of this.seasons) {
+      this.displayedColumns.splice(1, 0, 'season'+season.name);
+    }
   }
 
   private selectApartment(apartment: Apartment) {
@@ -101,22 +179,22 @@ export class AddressDetailsComponent implements OnInit {
   }
 
   private getPastoralVisitStatus(apartment: Apartment, season: Season): string {
-    if(apartment.pastoralVisits == null || apartment.pastoralVisits.length == 0) {
+    if(season == null || apartment.pastoralVisits == null || apartment.pastoralVisits.length == 0) {
       return null;
     }
     for(let visit of apartment.pastoralVisits) {
-      if(this.seasonIncludesDate(season, visit.date)) {
+      if(this.seasonIncludesDate(season, moment(visit.date, this.env.dateFormat()))) {
         return visit.value;
       }
     }
     return null;
   }
 
-  private countCompletedPastoralVisits(season: Season): number {
+  private countCompletedPastoralVisitsInSeason(season: Season): number {
     let count = 0;
     for(let apartment of this.address.apartments) {
       for(let visit of apartment.pastoralVisits) {
-        if(this.seasonIncludesDate(season, visit.date) && this.VISIT_COMPLETED_STATUS.includes(visit.value)) {
+        if(this.seasonIncludesDate(season, moment(visit.date, this.env.dateFormat())) && this.VISIT_COMPLETED_STATUS.includes(visit.value)) {
           count++;
         }
       }
@@ -124,63 +202,46 @@ export class AddressDetailsComponent implements OnInit {
     return count;
   }
 
-  private seasonIncludesDate(season: Season, date: string): boolean {
-    return moment(date, this.dateFormat).isBetween(moment(season.start, this.dateFormat), moment(season.end, this.dateFormat));
-  }
-
   private goBack(): void {
     this.location.back();
-  }
-
-  private getNextSeasonName(): string {
-    for(let season of this.seasons) {
-      if(season.current) {
-        return season.name;
-      }
-    }
-    return null;
   }
 
   private toggleEditMode(): void {
     this.edit.active = !this.edit.active;
     if(!this.edit.active) {
-      this.getAddress(this.address.id);
+      this.edit.season = null;
     }
   }
 
   private setSeasonToEdition(season: Season): void {
-    console.log('to edition: ');
-    console.log(season);
     if(this.edit.season != null && this.edit.season.id == season.id) {
       this.edit.season = null;
+      this.edit.active = false;
     }
     else {
       this.edit.season = season;
+      this.edit.active = true;
     }
   }
 
-  private savePastoralVisit(apartment: Apartment, status: string): void {
-
+  private prepareToSavePastoralVisit(apartment: Apartment, status: string, season: Season): void {
     let pastoralVisit = new PastoralVisit();
-    for(let visit of apartment.pastoralVisits) {
-      if(this.seasonIncludesDate(this.edit.season, visit.date)) {
-        pastoralVisit = {
-          id: visit.id,
-          date: moment(visit.date, this.dateFormat).format(this.dateFormat),
-          value: status,
-          apartmentId: apartment.id,
-          priestId: visit.priestId
-        }
+    let visit = this.getPastoralVisitFromSeason(apartment, season);
+    if(visit != null) {
+      pastoralVisit = {
+        id: visit.id,
+        date: moment(visit.date, this.env.dateFormat()).format(this.env.dateFormat()),
+        value: status,
+        apartmentId: apartment.id,
+        priestId: visit.priestId
       }
     }
+    else {
+      this.openPastoralVisitDialog(apartment, status, season, this.getCurrentDateIfInSeasonOrFirstInSeason());
+      return;
+    }
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json'
-      })
-    };
-
-    this.requestSavingPastoralVisit(pastoralVisit, httpOptions)
+    this.pastoralVisitService.savePastoralVisit(pastoralVisit, this.getApplicationJsonHeaders())
       .subscribe(
         pastoralVisit => {
           console.log('saved');
@@ -188,79 +249,89 @@ export class AddressDetailsComponent implements OnInit {
         },
         error => {
           console.log(error);
-          },
+        },
         () => {
           console.log('saving completed');
-        })
+          this.getAddress(this.address.id);
+          this.menu.apartments.open = true;
+        });
   }
 
-  private requestSavingPastoralVisit(data: PastoralVisit, httpOptions: object): Observable<PastoralVisit> {
-    return this.http.post<PastoralVisit>(this.pastoralVisitUrl, data, httpOptions)
-      .pipe(
-        catchError(this.handleError<PastoralVisit>("saving pastoral visit", new PastoralVisit()))
-      );
+  private getApplicationJsonHeaders(): object {
+    return {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
   }
 
-  private fetchSeasons(): Observable<Season[]> {
-    return this.http.get<Season[]>(this.seasonUrl)
-      .pipe(
-        catchError(this.handleError<Season[]>("saving pastoral visits", []))
-      );
+  private getPastoralVisitFromSeason(apartment: Apartment, season: Season) {
+    for(let visit of apartment.pastoralVisits) {
+      if(this.seasonIncludesDate(season, moment(visit.date, this.env.dateFormat()))) {
+        return visit;
+      }
+    }
+    return null;
+  }
+
+  public seasonIncludesDate(season: Season, date: Moment): boolean {
+    return date.isBetween(moment(season.start, this.env.dateFormat()), moment(season.end, this.env.dateFormat()));
   }
 
   private getLastSeason(): Season {
-    return this.sortSeasonsByEndDate()[0];
+    return this.sortSeasonsByEndDate(this.seasons)[0];
   }
 
-  private sortSeasonsByEndDate(): Season[] {
-    return this.seasons.sort((s1, s2) => {
-      if(moment(s1.end, this.dateFormat).isAfter(moment(s2.end, this.dateFormat))) {
+  private sortSeasonsByEndDate(seasons: Season[]): Season[] {
+    return seasons.sort((s1, s2) => {
+      if(moment(s1.end, this.env.dateFormat()).isAfter(moment(s2.end, this.env.dateFormat()))) {
         return -1;
       }
-      if(moment(s1.end, this.dateFormat).isBefore(moment(s2.end, this.dateFormat))) {
+      if(moment(s1.end, this.env.dateFormat()).isBefore(moment(s2.end, this.env.dateFormat()))) {
         return 1;
       }
       return 0;
     });
   }
 
+  private getCurrentLoggedPriestId(): number {
+    //TODO
+    return 3;
+  }
+
+  private getCurrentDateIfInSeasonOrFirstInSeason(): Moment {
+    let now = moment();
+    let season = this.getLastSeason();
+    if(this.seasonIncludesDate(season, now)) {
+      return now;
+    }
+    else {
+      return moment(season.start, this.env.dateFormat());
+    }
+  }
+
   private isCompleted(apartment: Apartment, season: Season): boolean {
     let status = this.getPastoralVisitStatus(apartment, season);
-    if(status == '+') {
-      return true;
-    }
-    return false;
+    return status == this.env.pastoralVisitStatus().completed;
   }
 
   private isRefused(apartment: Apartment, season: Season): boolean {
     let status = this.getPastoralVisitStatus(apartment, season);
-    if(status == '-') {
-      return true;
-    }
-    return false;
+    return status == this.env.pastoralVisitStatus().refused;
   }
 
   private isAbsent(apartment: Apartment, season: Season): boolean {
     let status = this.getPastoralVisitStatus(apartment, season);
-    if(status == '?') {
-      return true;
-    }
-    return false;
+    return status == this.env.pastoralVisitStatus().absent;
   }
 
   private isIndividually(apartment: Apartment, season: Season): boolean {
     let status = this.getPastoralVisitStatus(apartment, season);
-    if(status == 'ind.') {
-      return true;
-    }
-    return false;
+    return status == this.env.pastoralVisitStatus().individually;
   }
 
   private isNotRequested(apartment: Apartment, season: Season): boolean {
     let status = this.getPastoralVisitStatus(apartment, season);
-    if(status == 'x') {
-      return true;
-    }
-    return false;
+    return status == this.env.pastoralVisitStatus().not_requested;
   }
 }

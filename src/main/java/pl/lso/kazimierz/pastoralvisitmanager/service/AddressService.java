@@ -34,12 +34,12 @@ public class AddressService {
         return addressRepository.findAll(pageable);
     }
 
-    public AddressDto getAddressDetails(Long addressId) {
+    public Address getAddress(Long addressId) {
         Optional<Address> address = addressRepository.findById(addressId);
         if(!address.isPresent()) {
             throw new NotFoundException("Address not found");
         }
-        return AddressMapper.map(address.get());
+        return address.get();
     }
 
     @Transactional

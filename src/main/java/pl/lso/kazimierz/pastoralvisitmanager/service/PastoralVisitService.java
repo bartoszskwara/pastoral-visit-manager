@@ -44,10 +44,12 @@ public class PastoralVisitService {
             throw new NotFoundException("Priest not found");
         }
 
-        Optional<PastoralVisit> pastoralVisit = pastoralVisitRepository.findById(pastoralVisitDto.getId());
-        if(pastoralVisit.isPresent()) {
-            pastoralVisit.get().setValue(mapStatus(pastoralVisitDto.getValue()));
-            return pastoralVisitRepository.save(pastoralVisit.get());
+        if(pastoralVisitDto.getId() != null) {
+            Optional<PastoralVisit> pastoralVisit = pastoralVisitRepository.findById(pastoralVisitDto.getId());
+            if(pastoralVisit.isPresent()) {
+                pastoralVisit.get().setValue(mapStatus(pastoralVisitDto.getValue()));
+                return pastoralVisitRepository.save(pastoralVisit.get());
+            }
         }
 
         PastoralVisit newPastoralVisit = new PastoralVisit();

@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from "../../../../../frontend-old/src/environments/environment";
 import {Observable, of} from "rxjs/index";
 import {SimpleAddress} from "./model/SimpleAddress";
 import {catchError, tap} from "rxjs/internal/operators";
 import {Page} from "../shared/model/Page";
 import {ActivatedRoute, Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'home',

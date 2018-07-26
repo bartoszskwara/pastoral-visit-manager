@@ -1,5 +1,5 @@
 import {Component, Inject} from "@angular/core";
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {MAT_DATE_FORMATS, MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Moment} from "moment";
 import {Priest} from "../model/Priest";
 

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SimpleAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;

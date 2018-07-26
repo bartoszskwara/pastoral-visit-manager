@@ -25,6 +25,15 @@ public enum PastoralVisitStatus {
         return this.status;
     }
 
+    public static PastoralVisitStatus getByStatus(String status) {
+        for(PastoralVisitStatus visitStatus : values()) {
+            if(StringUtils.equalsIgnoreCase(status, visitStatus.status)) {
+                return visitStatus;
+            }
+        }
+        return null;
+    }
+
     public static PastoralVisitStatus getByName(String name) {
         for(PastoralVisitStatus status : values()) {
             if(StringUtils.equalsIgnoreCase(name, status.name())) {

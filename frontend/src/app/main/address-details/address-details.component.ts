@@ -5,13 +5,13 @@ import {HttpHeaders} from "@angular/common/http";
 import {Location} from "@angular/common/";
 import {Apartment} from "./model/Apartment";
 import * as moment from 'moment';
+import {Moment} from 'moment';
 import {PastoralVisit} from "./model/PastoralVisit";
 import {Season} from "./model/Season";
 import {SeasonService} from "../shared/service/season/season.service";
 import {AddressService} from "./service/address.service";
 import {PastoralVisitService} from "./service/pastoral-visit.service";
 import {EnvironmentService} from "../shared/service/environment/environment.service";
-import {Moment} from "moment";
 import {MatDialog} from "@angular/material";
 import {PastoralVisitDialog} from "./pastoral-visit-dialog/pastoral-visit-dialog";
 import {Priest} from "./model/Priest";
@@ -72,7 +72,6 @@ export class AddressDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(
       params => this.getAddress(parseInt(params.get('id')))
     );
-    console.log('aa1');
     this.priestService.fetchPriests()
       .subscribe(priests => {
           this.priests = priests;
@@ -80,10 +79,8 @@ export class AddressDetailsComponent implements OnInit {
         error => {
           console.log('error');
         },
-        () => {
-          console.log('aa2');
-        });
-    console.log('aa3');
+        () => {}
+        );
     this.seasonService.fetchSeasons()
       .subscribe(
         seasons => {

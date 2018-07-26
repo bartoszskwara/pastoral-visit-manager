@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {catchError} from "rxjs/internal/operators";
 import {Observable, of} from "rxjs/index";
 import {Address} from "../model/Address";

@@ -33,7 +33,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {MatSelectModule} from '@angular/material/select';
 import {PriestService} from "./shared/service/priest/priest.service";
-import { ExportAddressComponent } from './export-address/export-address.component';
+import {ExportAddressComponent} from './export-address/export-address.component';
+import {ExportAddressService} from "./export-address/service/export-address.service";
 
 @NgModule({
   imports: [
@@ -60,6 +61,6 @@ import { ExportAddressComponent } from './export-address/export-address.componen
   ],
   declarations: [DashboardComponent, TestComponent, HomeComponent, NavbarComponent, AddressDetailsComponent, PageNotFoundComponent, PastoralVisitDialog, ExportAddressComponent],
   entryComponents: [PastoralVisitDialog],
-  providers: [AddressService, SeasonService, PastoralVisitService, PriestService]
+  providers: [AddressService, SeasonService, PastoralVisitService, PriestService, ExportAddressService]
 })
 export class MainModule { }

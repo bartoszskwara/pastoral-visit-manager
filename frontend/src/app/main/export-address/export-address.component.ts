@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {ExportAddressService} from "./service/export-address.service";
 
 @Component({
   selector: 'export-address',
@@ -9,9 +10,25 @@ export class ExportAddressComponent implements OnInit {
 
   @Input() addressId: number;
 
-  constructor() { }
+  constructor(private exportService: ExportAddressService) { }
 
   ngOnInit() {
+  }
+
+  exportToCsv(): void {
+    this.exportService.exportToCsv(this.addressId)
+      .subscribe(res => {
+        console.log('start download:');
+        console.log(res);
+        let blob = new Blob([res], { type: 'text/csv' });
+        let url= window.URL.createObjectURL(blob);
+        window.open(url);
+      }, error => {
+        console.log('download error:');
+        console.log(error);
+      }, () => {
+        console.log('Completed file download.')
+      });
   }
 
 }

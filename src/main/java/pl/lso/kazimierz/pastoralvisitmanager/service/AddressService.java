@@ -5,11 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.exception.NotFoundException;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
-import pl.lso.kazimierz.pastoralvisitmanager.model.mapper.AddressMapper;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
 
 import javax.transaction.Transactional;

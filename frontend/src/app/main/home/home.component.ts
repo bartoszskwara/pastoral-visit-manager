@@ -6,6 +6,11 @@ import {catchError, tap} from "rxjs/internal/operators";
 import {Page} from "../shared/model/Page";
 import {ActivatedRoute, Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
+import {FormControl} from "@angular/forms";
+
+export interface Filter {
+  name: string;
+}
 
 @Component({
   selector: 'home',
@@ -21,29 +26,35 @@ export class HomeComponent implements OnInit {
   loading: boolean;
   page: number;
   size: number;
-  displayedColumns: string[] = ['no.', 'address'];
+  displayedColumns: string[] = ['no.', 'address', 'apartmentCount'];
+  filter: Filter;
 
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.addresses = [];
     this.loading = false;
     this.page = 0;
     this.size = 5;
+    this.filter = {
+      name: ''
+    };
   }
 
   ngOnInit() {
-    this.getAddresses(this.page, this.INITIAL_SIZE);
+    this.getAddresses(this.page, this.INITIAL_SIZE, this.filter);
     this.page = this.INITIAL_SIZE / this.size;
   }
 
   private getChunk(): void {
     this.page = this.page + 1;
-    this.getAddresses(this.page, this.size);
+    this.getAddresses(this.page, this.size, this.filter);
   }
 
-  private getAddresses(page: number, size: number): void {
+  private getAddresses(page: number, size: number, filter: Filter): void {
+    this.loading = true;
     let params = new HttpParams()
       .append('page', page.toString())
-      .append('size', size.toString());
+      .append('size', size.toString())
+      .append('name', filter.name);
 
     this.fetchAddresses({ params: params })
       .subscribe(
@@ -53,8 +64,10 @@ export class HomeComponent implements OnInit {
         error => {
           console.log('error');
           console.log(error);
+          this.loading = false;
         },
         () => {
+          this.loading = false;
           console.log('addresses fetched');
         });
   }
@@ -78,5 +91,29 @@ export class HomeComponent implements OnInit {
 
   private selectAddress(address: SimpleAddress) {
     this.router.navigate(['../address', address.id], { relativeTo: this.route });
+  }
+
+  applyFilter(): void {
+    console.log('filter: ' + this.filter.name);
+    this.loading = true;
+    let params = new HttpParams()
+      .append('page', '0')
+      .append('size', this.INITIAL_SIZE.toString())
+      .append('name', this.filter.name);
+
+    this.fetchAddresses({ params: params })
+      .subscribe(
+        response => {
+          this.addresses = response.content;
+        },
+        error => {
+          console.log('error');
+          console.log(error);
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+          console.log('addresses fetched');
+        });
   }
 }

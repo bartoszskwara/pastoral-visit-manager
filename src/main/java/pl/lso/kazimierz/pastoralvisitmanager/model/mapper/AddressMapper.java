@@ -21,6 +21,7 @@ public class AddressMapper {
                 .id(address.getId())
                 .streetName(address.getStreetName())
                 .blockNumber(address.getBlockNumber())
+                .apartmentCount(address.getApartments().size())
                 .build();
     }
 

@@ -6,6 +6,41 @@ table {
   }
 }
 
-.number-column {
-  color: rgba(255,255,255,.7);
+.position-relative {
+  position: relative;
 }
+
+.container {
+
+  add-address-button {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    padding: 20px;
+    z-index: 999;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .filter {
+    padding: 10px 0 0 10px;
+    background: lightslategrey;
+  }
+
+  .number-column {
+    color: rgba(255,255,255,.7);
+  }
+}
+

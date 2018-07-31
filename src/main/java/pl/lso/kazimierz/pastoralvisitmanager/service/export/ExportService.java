@@ -69,6 +69,7 @@ public class ExportService {
                 stringBuilder.append(DELIMITER);
             }
             stringBuilder.append("\n");
+            count++;
         }
 
         return stringBuilder.toString().getBytes();

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SimpleAddressDto;
@@ -31,8 +32,8 @@ public class AddressController {
     }
 
     @GetMapping({"", "/"})
-    public ResponseEntity getAllAddresses(@PageableDefault(sort = {"streetName", "blockNumber"}, direction = Sort.Direction.ASC, value = 5) Pageable pageable) {
-        Page<SimpleAddressDto> addressDtos = addressService.getAllAddresses(pageable).map(AddressMapper::mapSimple);
+    public ResponseEntity getAllAddresses(@PageableDefault(sort = {"streetName", "blockNumber"}, direction = Sort.Direction.ASC, value = 5) Pageable pageable, @RequestParam("name") String name) {
+        Page<SimpleAddressDto> addressDtos = addressService.getAllAddresses(pageable, name).map(AddressMapper::mapSimple);
         return ResponseEntity.ok(addressDtos);
     }
 

@@ -5,12 +5,14 @@ import {TestComponent} from "./test/test.component";
 import {HomeComponent} from "./home/home.component";
 import {AddressDetailsComponent} from "./address-details/address-details.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
+import {AddAddressComponent} from "./add-address/add-address.component";
 
 const routes: Routes = [
   { path: '',  component: DashboardComponent,
     children: [
       {path: '', redirectTo: 'home', pathMatch: 'full'},
       {path: 'home', component: HomeComponent},
+      {path: 'address/add', component: AddAddressComponent },
       {path: 'address/:id', component: AddressDetailsComponent },
       {path: 'test', component: TestComponent},
       {path: '404', component: PageNotFoundComponent},

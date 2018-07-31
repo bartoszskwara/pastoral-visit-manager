@@ -11,4 +11,5 @@ public class SimpleAddressDto {
     private Long id;
     private String streetName;
     private String blockNumber;
+    private Integer apartmentCount;
 }

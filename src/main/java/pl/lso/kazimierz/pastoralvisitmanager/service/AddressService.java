@@ -28,8 +28,8 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public Page<Address> getAllAddresses(Pageable pageable) {
-        return addressRepository.findAll(pageable);
+    public Page<Address> getAllAddresses(Pageable pageable, String name) {
+        return addressRepository.findAllByName(pageable, name);
     }
 
     public Address getAddress(Long addressId) {

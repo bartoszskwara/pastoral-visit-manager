@@ -1,0 +1,16 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      Add new address
+    </mat-card-header>
+    <mat-card-content>
+      <form class="new-address-form">
+        <mat-form-field>
+          <input matInput placeholder="Street name"  [formControl]="newAddress.streetName.control" required>
+          <mat-error *ngIf="newAddress.streetName.control.invalid">{{getStreetNameErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+</div>

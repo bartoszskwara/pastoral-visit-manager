@@ -28,13 +28,16 @@ import {SeasonService} from "./shared/service/season/season.service";
 import {AddressService} from "./address-details/service/address.service";
 import {PastoralVisitService} from "./address-details/service/pastoral-visit.service";
 import {PastoralVisitDialog} from "./address-details/pastoral-visit-dialog/pastoral-visit-dialog";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {MatSelectModule} from '@angular/material/select';
 import {PriestService} from "./shared/service/priest/priest.service";
 import {ExportAddressComponent} from './export-address/export-address.component';
 import {ExportAddressService} from "./export-address/service/export-address.service";
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { AddAddressButtonComponent } from './add-address-button/add-address-button.component';
+import { AddAddressComponent } from './add-address/add-address.component';
 
 @NgModule({
   imports: [
@@ -55,11 +58,13 @@ import {ExportAddressService} from "./export-address/service/export-address.serv
     MatDialogModule,
     MatInputModule,
     FormsModule,
+    ReactiveFormsModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatFormFieldModule
   ],
-  declarations: [DashboardComponent, TestComponent, HomeComponent, NavbarComponent, AddressDetailsComponent, PageNotFoundComponent, PastoralVisitDialog, ExportAddressComponent],
+  declarations: [DashboardComponent, TestComponent, HomeComponent, NavbarComponent, AddressDetailsComponent, PageNotFoundComponent, PastoralVisitDialog, ExportAddressComponent, AddAddressButtonComponent, AddAddressComponent],
   entryComponents: [PastoralVisitDialog],
   providers: [AddressService, SeasonService, PastoralVisitService, PriestService, ExportAddressService]
 })

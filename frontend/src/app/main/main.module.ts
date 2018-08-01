@@ -38,6 +38,8 @@ import {ExportAddressService} from "./export-address/service/export-address.serv
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { AddAddressButtonComponent } from './add-address-button/add-address-button.component';
 import { AddAddressComponent } from './add-address/add-address.component';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -62,7 +64,9 @@ import { AddAddressComponent } from './add-address/add-address.component';
     MatDatepickerModule,
     MatMomentDateModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatSliderModule,
+    MatChipsModule
   ],
   declarations: [DashboardComponent, TestComponent, HomeComponent, NavbarComponent, AddressDetailsComponent, PageNotFoundComponent, PastoralVisitDialog, ExportAddressComponent, AddAddressButtonComponent, AddAddressComponent],
   entryComponents: [PastoralVisitDialog],

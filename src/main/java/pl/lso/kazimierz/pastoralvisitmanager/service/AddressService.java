@@ -4,28 +4,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.lso.kazimierz.pastoralvisitmanager.exception.BadRequestException;
 import pl.lso.kazimierz.pastoralvisitmanager.exception.NotFoundException;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.comparator.ApartmentComparator;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressData;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
+import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentRepository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
+import static org.apache.commons.lang3.StringUtils.trim;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 
 @Service
 public class AddressService {
 
     private AddressRepository addressRepository;
+    private ApartmentRepository apartmentRepository;
 
     @Autowired
-    public AddressService(AddressRepository addressRepository) {
+    public AddressService(AddressRepository addressRepository, ApartmentRepository apartmentRepository) {
         this.addressRepository = addressRepository;
+        this.apartmentRepository = apartmentRepository;
     }
 
     public Page<Address> getAllAddresses(Pageable pageable, String name) {
@@ -37,47 +44,70 @@ public class AddressService {
         if(!address.isPresent()) {
             throw new NotFoundException("Address not found");
         }
+        address.get().getApartments().sort(new ApartmentComparator());
         return address.get();
     }
 
     @Transactional
-    public void addNewAddress(NewAddressDto newAddressDto) {
-        if(newAddressDto == null) {
+    public Address addNewAddress(AddressData addressData) {
+        if(addressData == null) {
             throw new NotFoundException("Address data not found");
         }
-
         Address address = new Address();
-        address.setStreetName(newAddressDto.getStreetName());
-        address.setBlockNumber(newAddressDto.getBlockNumber());
+        address.setStreetName(trim(addressData.getStreetName()));
+        address.setBlockNumber(trim(addressData.getBlockNumber()));
 
-        List<Apartment> apartments = createApartments(address, newAddressDto.getApartmentsFrom(), newAddressDto.getApartmentsTo(),
-                newAddressDto.getIncluded(), newAddressDto.getExcluded());
-
-        address.setApartments(apartments);
-        addressRepository.save(address);
+        address = addressRepository.save(address);
+        saveApartments(address, addressData.getApartments());
+        return address;
     }
 
-    private List<Apartment> createApartments(Address address, Integer from, Integer to, List<String> included, List<Integer> excluded) {
-        included = included != null ? included : emptyList();
-        excluded = excluded != null ? excluded : emptyList();
-
-        List<Apartment> apartments = new ArrayList<>();
-        for(int i = from; i <= to; i++) {
-            if(!excluded.contains(i)) {
-                Apartment apartment = new Apartment();
-                apartment.setNumber(String.valueOf(i));
-                apartment.setAddress(address);
-                apartments.add(apartment);
-            }
+    @Transactional
+    public Address updateAddress(Long addressId, AddressData addressData) {
+        Optional<Address> address = addressRepository.findById(addressId);
+        if(!address.isPresent()) {
+            throw new NotFoundException("Address not found");
+        }
+        Address existingAddress = addressRepository.findByStreetNameIgnoreCaseAndBlockNumberIgnoreCase(addressData.getStreetName(), addressData.getBlockNumber());
+        if(existingAddress != null && !existingAddress.getId().equals(addressId)) {
+            throw new BadRequestException("Such an address already exists");
         }
 
-        for(String i : included) {
-            Apartment apartment = new Apartment();
-            apartment.setNumber(String.valueOf(i));
-            apartment.setAddress(address);
-            apartments.add(apartment);
+        address.get().setStreetName(trim(addressData.getStreetName()));
+        address.get().setBlockNumber(trim(addressData.getBlockNumber()));
+
+        Address savedAddress = addressRepository.save(address.get());
+        saveApartments(savedAddress, addressData.getApartments());
+        return savedAddress;
+    }
+
+    private void saveApartments(Address address, List<String> apartments) {
+        if(isEmpty(apartments)) {
+           throw new BadRequestException("Address should have at least one apartment");
+        }
+        List<Apartment> existingApartments = apartmentRepository.findByAddressId(address.getId());
+        List<String> existingApartmentNumbers = existingApartments.stream()
+                .map(Apartment::getNumber)
+                .collect(Collectors.toList());
+
+        List<Apartment> apartmentsToRemove = existingApartments.stream()
+                .filter(apartment -> !apartments.contains(apartment.getNumber()))
+                .collect(Collectors.toList());
+        for(Apartment apartment : apartmentsToRemove) {
+            apartmentRepository.delete(apartment);
         }
 
-        return apartments;
+        apartments.removeAll(existingApartmentNumbers);
+
+        for(String number : apartments) {
+            saveApartment(address, number);
+        }
+    }
+
+    private void saveApartment(Address address, String number) {
+        Apartment apartment = new Apartment();
+        apartment.setAddress(address);
+        apartment.setNumber(number);
+        apartmentRepository.save(apartment);
     }
 }

@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'navbar',
@@ -7,9 +8,16 @@ import {Component, OnInit} from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private location: Location) { }
 
   ngOnInit() {
   }
 
+  isBackVisible() {
+    return !this.location.isCurrentPathEqualTo('/app/home');
+  }
+
+  private goBack(): void {
+    this.location.back();
+  }
 }

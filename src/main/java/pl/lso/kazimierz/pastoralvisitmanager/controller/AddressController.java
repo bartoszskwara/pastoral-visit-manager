@@ -10,11 +10,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.NewAddressDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressData;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SimpleAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.mapper.AddressMapper;
@@ -44,8 +45,14 @@ public class AddressController {
     }
 
     @PostMapping({"", "/"})
-    public ResponseEntity addNewAddress(@RequestBody @Validated NewAddressDto newAddressDto) {
-        addressService.addNewAddress(newAddressDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity addNewAddress(@RequestBody @Validated AddressData addressData) {
+        Address address = addressService.addNewAddress(addressData);
+        return ResponseEntity.ok(AddressMapper.map(address));
+    }
+
+    @PutMapping("/{addressId}")
+    public ResponseEntity updateAddress(@PathVariable("addressId") Long addressId, @RequestBody @Validated AddressData addressDto) {
+        Address address = addressService.updateAddress(addressId, addressDto);
+        return ResponseEntity.ok(AddressMapper.map(address));
     }
 }

@@ -20,6 +20,13 @@
       <td class="color-light" mat-cell *matCellDef="let address">{{address.apartmentCount}} ap.</td>
     </ng-container>
 
+    <ng-container matColumnDef="addressEdit">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td class="color-light" mat-cell *matCellDef="let address">
+        <mat-icon (click)="goToAddressEdit(address)">edit</mat-icon>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="empty-cell">
       <th mat-header-cell *matHeaderCellDef></th>
     </ng-container>

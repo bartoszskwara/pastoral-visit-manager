@@ -1,23 +1,23 @@
 import {Injectable} from '@angular/core';
-import {Season} from "../../../address/address-details/model/Season";
-import {environment} from "../../../../../environments/environment";
 import {catchError} from "rxjs/internal/operators";
 import {Observable, of} from "rxjs/index";
+import {Address} from "../address-details/model/Address";
 import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
-export class SeasonService {
+export class AddressDetailsService {
 
-  private seasonUrl = `${environment.server.url}` + "/season";
+  private addressUrl = `${environment.server.url}/address`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  fetchSeasons(): Observable<Season[]> {
-    return this.http.get<Season[]>(this.seasonUrl)
+  fetchAddress(id: number): Observable<Address> {
+    return this.http.get<Address>(`${this.addressUrl}/${id}`)
       .pipe(
-        catchError(this.handleError<Season[]>("fetching seasons", []))
+        catchError(this.handleError<Address>("get address details", new Address()))
       );
   }
 
@@ -25,7 +25,6 @@ export class SeasonService {
     return (error: any): Observable<T> => {
       console.log('ERROR');
       console.error(error);
-
       return of(result as T);
     };
   }

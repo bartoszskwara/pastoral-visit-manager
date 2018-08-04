@@ -22,12 +22,12 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {TestComponent} from './test/test.component';
 import {HomeComponent} from './home/home.component';
 import {NavbarComponent} from './navbar/navbar.component';
-import {AddressDetailsComponent} from './address-details/address-details.component';
+import {AddressDetailsComponent} from './address/address-details/address-details.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {SeasonService} from "./shared/service/season/season.service";
-import {AddressService} from "./address-details/service/address.service";
-import {PastoralVisitService} from "./address-details/service/pastoral-visit.service";
-import {PastoralVisitDialog} from "./address-details/pastoral-visit-dialog/pastoral-visit-dialog";
+import {AddressDetailsService} from "./address/service/address-details.service";
+import {PastoralVisitService} from "./shared/service/pastoral-visit/pastoral-visit.service";
+import {PastoralVisitDialog} from "./address/address-details/pastoral-visit-dialog/pastoral-visit-dialog";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
@@ -37,9 +37,14 @@ import {ExportAddressComponent} from './export-address/export-address.component'
 import {ExportAddressService} from "./export-address/service/export-address.service";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { AddAddressButtonComponent } from './add-address-button/add-address-button.component';
-import { AddAddressComponent } from './add-address/add-address.component';
+import { AddAddressComponent } from './address/add-address/add-address.component';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatChipsModule} from '@angular/material/chips';
+import {AddAddressService} from "./address/service/add-address.service";
+import { EditAddressComponent } from './address/edit-address/edit-address.component';
+import {EditAddressService} from "./address/service/edit-address.service";
+import { AddressFormComponent } from './address/edit-address/address-form/address-form.component';
+import {AddressService} from "./address/service/address.service";
 
 @NgModule({
   imports: [
@@ -68,8 +73,27 @@ import {MatChipsModule} from '@angular/material/chips';
     MatSliderModule,
     MatChipsModule
   ],
-  declarations: [DashboardComponent, TestComponent, HomeComponent, NavbarComponent, AddressDetailsComponent, PageNotFoundComponent, PastoralVisitDialog, ExportAddressComponent, AddAddressButtonComponent, AddAddressComponent],
+  declarations: [
+    DashboardComponent,
+    TestComponent,
+    HomeComponent,
+    NavbarComponent,
+    AddressDetailsComponent,
+    PageNotFoundComponent,
+    PastoralVisitDialog,
+    ExportAddressComponent,
+    AddAddressButtonComponent,
+    AddAddressComponent,
+    EditAddressComponent,
+    AddressFormComponent],
   entryComponents: [PastoralVisitDialog],
-  providers: [AddressService, SeasonService, PastoralVisitService, PriestService, ExportAddressService]
+  providers: [AddressDetailsService,
+    SeasonService,
+    PastoralVisitService,
+    PriestService,
+    ExportAddressService,
+    AddressService,
+    AddAddressService,
+    EditAddressService]
 })
 export class MainModule { }

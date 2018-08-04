@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
+  <mat-toolbar-row class="flex-box">
+    <div *ngIf="isBackVisible()" class="flex-box back-box" (click)="goBack()">
+      <mat-icon>arrow_back_ios</mat-icon>
+    </div>
     <span>Pastoral Visit Manager</span>
     <div>
       <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -20,9 +23,5 @@
         </button>
       </mat-menu>
     </div>
-
-
-
-
   </mat-toolbar-row>
 </mat-toolbar>

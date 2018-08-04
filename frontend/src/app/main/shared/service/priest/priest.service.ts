@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {catchError} from "rxjs/internal/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {Priest} from "../../../address-details/model/Priest";
+import {Priest} from "../../../address/address-details/model/Priest";
 import {Observable, of} from "rxjs/index";
 
 @Injectable({

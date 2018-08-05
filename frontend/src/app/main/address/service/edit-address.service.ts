@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Address} from "../address-details/model/Address";
+import {Address} from "../../shared/model/Address";
 import {catchError} from "rxjs/internal/operators";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AddAddressService} from "./add-address.service";

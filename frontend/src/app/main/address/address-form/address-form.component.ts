@@ -3,8 +3,8 @@ import {FormControl, Validators} from "@angular/forms";
 import {AddressFormControl} from "./model/AddressFormControl";
 import {MatChipInputEvent} from "@angular/material";
 import {COMMA, ENTER, SPACE} from "@angular/cdk/keycodes";
-import {Address} from "../../address-details/model/Address";
-import {AddressDto} from "../../../shared/model/AddressDto";
+import {Address} from "../../shared/model/Address";
+import {AddressDto} from "../../shared/model/AddressDto";
 
 @Component({
   selector: 'address-form',
@@ -22,6 +22,9 @@ export class AddressFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if(this.address == null) {
+      this.address = new Address();
+    }
     let apartments = this.splitApartments();
     this.addressData = {
       streetName: {
@@ -67,7 +70,6 @@ export class AddressFormComponent implements OnInit {
       return;
     }
     let data = AddressFormComponent.mapNewAddressDto(addressData);
-    console.log('emit', data);
     this.save.emit(data);
   }
 
@@ -99,7 +101,9 @@ export class AddressFormComponent implements OnInit {
   splitApartments(): {regular: string[], included: string[], excluded: string[]} {
     let regularApartemnts = [];
     let included = [];
-    let excluded = [];
+    if(this.address.apartments == null) {
+      return {regular: [], included: [], excluded: []}
+    }
     for(let apartment of this.address.apartments) {
       if(AddressFormComponent.isRegularNumber(apartment.number)) {
         regularApartemnts.push(apartment.number);
@@ -108,7 +112,7 @@ export class AddressFormComponent implements OnInit {
         included.push(apartment.number);
       }
     }
-    excluded = AddressFormComponent.getExcludedApartments(regularApartemnts);
+    let excluded = AddressFormComponent.getExcludedApartments(regularApartemnts);
 
     return {
       regular: regularApartemnts,

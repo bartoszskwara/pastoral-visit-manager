@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Season} from "../../../address/address-details/model/Season";
+import {Season} from "../../model/Season";
 import {environment} from "../../../../../environments/environment";
 import {catchError} from "rxjs/internal/operators";
 import {Observable, of} from "rxjs/index";

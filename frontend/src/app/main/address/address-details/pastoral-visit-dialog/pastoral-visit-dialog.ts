@@ -1,7 +1,7 @@
 import {Component, Inject} from "@angular/core";
 import {MAT_DATE_FORMATS, MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Moment} from "moment";
-import {Priest} from "../model/Priest";
+import {Priest} from "../../../shared/model/Priest";
 
 export interface DialogData {
   priestId: number;

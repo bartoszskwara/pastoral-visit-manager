@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {catchError, tap} from "rxjs/internal/operators";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Address} from "../address-details/model/Address";
+import {Address} from "../../shared/model/Address";
 import {environment} from "../../../../environments/environment";
 import {Observable, of} from "rxjs/index";
 import {SimpleAddress} from "../../home/model/SimpleAddress";

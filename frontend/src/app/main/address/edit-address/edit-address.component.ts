@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Address} from "../address-details/model/Address";
+import {Component, OnInit} from '@angular/core';
+import {Address} from "../../shared/model/Address";
 import {AddressDto} from "../../shared/model/AddressDto";
 import {EditAddressService} from "../service/edit-address.service";
 import {ActivatedRoute, Router} from "@angular/router";

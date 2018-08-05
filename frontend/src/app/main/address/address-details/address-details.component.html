@@ -2,14 +2,19 @@
   <mat-spinner></mat-spinner>
 </div>
 <div *ngIf="!loading.main && address != null" class="flex-center">
-  <div class="address-container bgcolor-accent">
+  <div class="flex-row-start bgcolor-accent">
     <div class="address-data">
       <div>
         <div class="address-title mat-title">{{address.streetName}} {{address.blockNumber}}</div>
         <div class="address-description mat-body-1">Apartments: {{address.apartments.length}}</div>
       </div>
-      <div *ngIf="getLastSeason() != null" class="summary mat-display-1">
-        +{{countCompletedPastoralVisitsInSeason(getLastSeason())}}
+      <div class="flex-row-start">
+        <div *ngIf="getLastSeason() != null" class="summary mat-display-1">
+          +{{countCompletedPastoralVisitsInSeason(getLastSeason())}}
+        </div>
+        <div class="cursor-pointer">
+          <mat-icon (click)="goToAddressEdit(address)">edit</mat-icon>
+        </div>
       </div>
     </div>
   </div>

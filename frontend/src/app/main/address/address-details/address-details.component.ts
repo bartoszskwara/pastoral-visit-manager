@@ -1,20 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Address} from "./model/Address";
+import {Address} from "../../shared/model/Address";
 import {HttpHeaders} from "@angular/common/http";
-import {Apartment} from "./model/Apartment";
+import {Apartment} from "../../shared/model/Apartment";
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {PastoralVisit} from "./model/PastoralVisit";
-import {Season} from "./model/Season";
+import {PastoralVisit} from "../../shared/model/PastoralVisit";
+import {Season} from "../../shared/model/Season";
 import {SeasonService} from "../../shared/service/season/season.service";
 import {AddressDetailsService} from "../service/address-details.service";
 import {PastoralVisitService} from "../../shared/service/pastoral-visit/pastoral-visit.service";
 import {EnvironmentService} from "../../shared/service/environment/environment.service";
 import {MatDialog} from "@angular/material";
 import {PastoralVisitDialog} from "./pastoral-visit-dialog/pastoral-visit-dialog";
-import {Priest} from "./model/Priest";
+import {Priest} from "../../shared/model/Priest";
 import {PriestService} from "../../shared/service/priest/priest.service";
+import {SimpleAddress} from "../../home/model/SimpleAddress";
 
 @Component({
   selector: 'address-details',
@@ -179,6 +180,10 @@ export class AddressDetailsComponent implements OnInit {
 
   private selectApartment(apartment: Apartment) {
     this.router.navigate(['apartment', apartment.id]);
+  }
+
+  goToAddressEdit(address: SimpleAddress): void {
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
   private getPastoralVisitStatus(apartment: Apartment, season: Season): string {

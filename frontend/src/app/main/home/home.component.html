@@ -40,8 +40,8 @@
       </th>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-header-row *matHeaderRowDef="['empty-cell', 'filter', 'empty-cell']"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" style="display: none"></tr>
+    <tr mat-header-row *matHeaderRowDef="['empty-cell', 'filter', 'empty-cell', 'empty-cell']"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectAddress(row)"></tr>
 
     <div infiniteScroll

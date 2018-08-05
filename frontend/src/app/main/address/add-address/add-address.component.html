@@ -4,59 +4,7 @@
       <h1 class="mat-headline">New address</h1>
     </mat-card-header>
     <mat-card-content>
-      <div class="form-container">
-          <mat-form-field>
-            <input matInput placeholder="Street name" [formControl]="newAddress.streetName.control" required>
-            <mat-error *ngIf="newAddress.streetName.control.invalid">{{getStreetNameErrorMessage()}}</mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Block number" [formControl]="newAddress.blockNumber.control" required>
-            <mat-error *ngIf="newAddress.blockNumber.control.invalid">{{getBlockNumberErrorMessage()}}</mat-error>
-          </mat-form-field>
-          <div class="slider">
-            <h1 class="mat-body-1 color-bright">Apartments range</h1>
-            <mat-slider
-              max="200"
-              min="0"
-              step="1"
-              thumbLabel="true"
-              tickInterval="30"
-              [(ngModel)]="newAddress.apartments.range">
-            </mat-slider>
-          </div>
-
-          <mat-form-field>
-            <mat-chip-list #includedChips>
-              <mat-chip *ngFor="let chip of newAddress.included.chips" [selectable]="true"
-                        [removable]="true" (removed)="removeChip(chip, newAddress.included.chips)">
-                {{chip}}
-                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-              </mat-chip>
-              <input placeholder="Custom apartments"
-                     [matChipInputFor]="includedChips"
-                     [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
-                     [matChipInputAddOnBlur]="true"
-                     (matChipInputTokenEnd)="createChip($event, newAddress.included)">
-            </mat-chip-list>
-          </mat-form-field>
-
-        <mat-form-field>
-          <mat-chip-list #excludedChips>
-            <mat-chip *ngFor="let chip of newAddress.excluded.chips" [selectable]="true"
-                      [removable]="true" (removed)="removeChip(chip, newAddress.excluded.chips)">
-              {{chip}}
-              <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-            </mat-chip>
-            <input placeholder="Excluded apartments"
-                   [matChipInputFor]="excludedChips"
-                   [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
-                   [matChipInputAddOnBlur]="true"
-                   (matChipInputTokenEnd)="createChip($event, newAddress.excluded)">
-          </mat-chip-list>
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="addNewAddress(newAddress)">Save</button>
-      </div>
+      <address-form [address]="null" (save)="addNewAddress($event)"></address-form>
     </mat-card-content>
   </mat-card>
-
 </div>

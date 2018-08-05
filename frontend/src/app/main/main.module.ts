@@ -43,7 +43,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {AddAddressService} from "./address/service/add-address.service";
 import { EditAddressComponent } from './address/edit-address/edit-address.component';
 import {EditAddressService} from "./address/service/edit-address.service";
-import { AddressFormComponent } from './address/edit-address/address-form/address-form.component';
+import { AddressFormComponent } from './address/address-form/address-form.component';
 import {AddressService} from "./address/service/address.service";
 
 @NgModule({

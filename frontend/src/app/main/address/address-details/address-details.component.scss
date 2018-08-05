@@ -19,10 +19,11 @@ $accent: mat-palette($mat-blue-gray, A400, A300, A600);
   justify-content: center;
 }
 
-.address-container {
+.flex-row-start {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .flex-center {

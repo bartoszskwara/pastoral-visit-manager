@@ -45,6 +45,9 @@ import { EditAddressComponent } from './address/edit-address/edit-address.compon
 import {EditAddressService} from "./address/service/edit-address.service";
 import { AddressFormComponent } from './address/address-form/address-form.component';
 import {AddressService} from "./address/service/address.service";
+import { BulkExportComponent } from './export-address/bulk-export/bulk-export.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   imports: [
@@ -71,7 +74,9 @@ import {AddressService} from "./address/service/address.service";
     MatSelectModule,
     MatFormFieldModule,
     MatSliderModule,
-    MatChipsModule
+    MatChipsModule,
+    MatTabsModule,
+    MatCheckboxModule
   ],
   declarations: [
     DashboardComponent,
@@ -85,7 +90,8 @@ import {AddressService} from "./address/service/address.service";
     AddAddressButtonComponent,
     AddAddressComponent,
     EditAddressComponent,
-    AddressFormComponent],
+    AddressFormComponent,
+    BulkExportComponent],
   entryComponents: [PastoralVisitDialog],
   providers: [AddressDetailsService,
     SeasonService,

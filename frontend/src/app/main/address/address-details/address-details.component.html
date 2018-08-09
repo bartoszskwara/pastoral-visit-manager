@@ -52,19 +52,19 @@
           <td class="pastoral-status-cell" mat-cell *matCellDef="let apartment">
             <div *ngIf="edit.active">
               <mat-button-toggle-group>
-                <mat-button-toggle [checked]="isCompleted(apartment, this.edit.season)" value="completed" (change)="prepareToSavePastoralVisit(apartment, $event.value, this.edit.season)">
+                <mat-button-toggle [checked]="isCompleted(apartment, this.edit.season)" value="completed" (change)="prepareToSavePastoralVisit(apartment, $event, this.edit.season)">
                   {{env.pastoralVisitStatus().completed}}
                 </mat-button-toggle>
-                <mat-button-toggle [checked]="isRefused(apartment, this.edit.season)" value="refused" (change)="prepareToSavePastoralVisit(apartment, $event.value, this.edit.season)">
+                <mat-button-toggle [checked]="isRefused(apartment, this.edit.season)" value="refused" (change)="prepareToSavePastoralVisit(apartment, $event, this.edit.season)">
                   {{env.pastoralVisitStatus().refused}}
                 </mat-button-toggle>
-                <mat-button-toggle [checked]="isAbsent(apartment, this.edit.season)" value="absent" (change)="prepareToSavePastoralVisit(apartment, $event.value, this.edit.season)">
+                <mat-button-toggle [checked]="isAbsent(apartment, this.edit.season)" value="absent" (change)="prepareToSavePastoralVisit(apartment, $event, this.edit.season)">
                   {{env.pastoralVisitStatus().absent}}
                 </mat-button-toggle>
-                <mat-button-toggle [checked]="isIndividually(apartment, this.edit.season)" value="individually" (change)="prepareToSavePastoralVisit(apartment, $event.value, this.edit.season)">
+                <mat-button-toggle [checked]="isIndividually(apartment, this.edit.season)" value="individually" (change)="prepareToSavePastoralVisit(apartment, $event, this.edit.season)">
                   {{env.pastoralVisitStatus().individually}}
                 </mat-button-toggle>
-                <mat-button-toggle [checked]="isNotRequested(apartment, this.edit.season)" value="not_requested" (change)="prepareToSavePastoralVisit(apartment, $event.value, this.edit.season)">
+                <mat-button-toggle [checked]="isNotRequested(apartment, this.edit.season)" value="not_requested" (change)="prepareToSavePastoralVisit(apartment, $event, this.edit.season)">
                   {{env.pastoralVisitStatus().not_requested}}
                 </mat-button-toggle>
               </mat-button-toggle-group>

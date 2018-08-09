@@ -1,6 +1,7 @@
 package pl.lso.kazimierz.pastoralvisitmanager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Season;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.SeasonRepository;
@@ -18,6 +19,6 @@ public class SeasonService {
     }
 
     public List<Season> getSeasons() {
-        return seasonRepository.findAll();
+        return seasonRepository.findAll(new Sort(Sort.Direction.ASC, "endDate"));
     }
 }

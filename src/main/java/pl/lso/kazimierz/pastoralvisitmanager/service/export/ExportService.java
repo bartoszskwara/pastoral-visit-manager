@@ -2,26 +2,20 @@ package pl.lso.kazimierz.pastoralvisitmanager.service.export;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import pl.lso.kazimierz.pastoralvisitmanager.exception.NotFoundException;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
-import pl.lso.kazimierz.pastoralvisitmanager.model.entity.PastoralVisit;
-import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Priest;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Season;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
-import pl.lso.kazimierz.pastoralvisitmanager.repository.PriestRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.SeasonRepository;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
+import static pl.lso.kazimierz.pastoralvisitmanager.service.util.PastoralVisitUtils.getPastoralVisitStatus;
 
 @Service
 public class ExportService {
@@ -87,25 +81,4 @@ public class ExportService {
         }
         return stringBuilder.toString();
     }
-
-    // TODO: tabela: Status, zamiast +,-,? w bazie
-    private PastoralVisitStatus getPastoralVisitStatus(Apartment apartment, Season season) {
-        if(isEmpty(apartment.getPastoralVisits())) {
-            return null;
-        }
-        for(PastoralVisit pastoralVisit : apartment.getPastoralVisits()) {
-            if(seasonIncludesDate(season, pastoralVisit.getDate())) {
-                return PastoralVisitStatus.getByStatus(pastoralVisit.getValue());
-            }
-        }
-        return null;
-    }
-
-    private boolean seasonIncludesDate(Season season, Date date) {
-        if(date == null) {
-            return false;
-        }
-        return date.after(season.getStartDate()) && date.before(season.getEndDate());
-    }
-
 }

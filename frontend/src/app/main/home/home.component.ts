@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   displayedColumns: string[] = ['no.', 'address', 'apartmentCount', 'addressEdit'];
   filter: Filter;
 
-  constructor(private addressService: AddressService, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
+  constructor(private addressService: AddressService, private router: Router, private route: ActivatedRoute) {
     this.addresses = [];
     this.loading = false;
     this.page = 0;

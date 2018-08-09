@@ -11,7 +11,7 @@ import {SeasonService} from "../../shared/service/season/season.service";
 import {AddressDetailsService} from "../service/address-details.service";
 import {PastoralVisitService} from "../../shared/service/pastoral-visit/pastoral-visit.service";
 import {EnvironmentService} from "../../shared/service/environment/environment.service";
-import {MatDialog} from "@angular/material";
+import {MatButtonToggleChange, MatDialog} from "@angular/material";
 import {PastoralVisitDialog} from "./pastoral-visit-dialog/pastoral-visit-dialog";
 import {Priest} from "../../shared/model/Priest";
 import {PriestService} from "../../shared/service/priest/priest.service";
@@ -127,8 +127,6 @@ export class AddressDetailsComponent implements OnInit {
   }
 
   openPastoralVisitDialog(apartment: Apartment, status: string, season: Season, startDate: Moment): void {
-    console.log('priestId', this.edit.newPastoralVisit.priestId);
-    console.log('typeof', typeof this.edit.newPastoralVisit.priestId);
     const dialogRef = this.dialog.open(PastoralVisitDialog, {
       width: '250px',
       data: {
@@ -228,9 +226,10 @@ export class AddressDetailsComponent implements OnInit {
     }
   }
 
-  private prepareToSavePastoralVisit(apartment: Apartment, status: string, season: Season): void {
+  private prepareToSavePastoralVisit(apartment: Apartment, event: MatButtonToggleChange, season: Season): void {
     let pastoralVisit = new PastoralVisit();
     let visit = this.getPastoralVisitFromSeason(apartment, season);
+    let status = event ? event.value : null;
     if(visit != null) {
       pastoralVisit = {
         id: visit.id,
@@ -312,7 +311,6 @@ export class AddressDetailsComponent implements OnInit {
     if(this.seasonIncludesDate(season, now)) {
       return now;
     }
-    console.log('TUTUTUT', season);
     return moment(season.start, this.env.dateFormat());
   }
 

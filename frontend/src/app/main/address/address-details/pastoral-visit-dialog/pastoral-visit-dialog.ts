@@ -36,10 +36,4 @@ export class PastoralVisitDialog {
   onNoClick(): void {
     this.dialogRef.close();
   }
-
-  log(v: string) {
-    console.log(v);
-    console.log(typeof v);
-  }
-
 }

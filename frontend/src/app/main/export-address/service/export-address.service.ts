@@ -3,6 +3,7 @@ import {environment} from "../../../../environments/environment";
 import {catchError} from "rxjs/internal/operators";
 import {Observable, of} from "rxjs/index";
 import {HttpClient} from "@angular/common/http";
+import {SelectedAddressDto} from "../model/SelectedAddressDto";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class ExportAddressService {
   }*/
   exportToCsv(addressId: number): Observable<Blob> {
     return this.downloadFile(`${this.exportUrl}/address/${addressId}/format/csv`, this.getResponseTypeBlobOptions());
+  }
+
+  exportBulkCsv(data: SelectedAddressDto[]) {
+    return this.http.post(`${this.exportUrl}/address/bulk/format/csv`, data, this.getResponseTypeBlobOptions());
   }
 
   downloadFile(url: string, options: object): Observable<Blob> {

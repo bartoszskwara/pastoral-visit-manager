@@ -5,6 +5,12 @@ table {
   td {
     cursor: pointer;
   }
+
+  tr {
+    &:hover td {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
 }
 
 .position-relative {
@@ -12,7 +18,6 @@ table {
 }
 
 .container {
-
   add-address-button {
     position: fixed;
     right: 40px;
@@ -42,6 +47,12 @@ table {
 
   .color-light {
     color: rgba(255,255,255,.7);
+  }
+
+  .edit {
+    &:hover mat-icon {
+      color: white;
+    }
   }
 }
 

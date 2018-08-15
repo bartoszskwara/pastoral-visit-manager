@@ -1,4 +1,5 @@
 export class SelectedAddressDto {
   addressId: number;
-  seasonIds: number[]
+  seasonIds: number[];
+  emptyColumnsCount: number;
 }

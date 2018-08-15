@@ -2,15 +2,19 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.entity;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,4 +39,7 @@ public class Season {
     @Column(nullable = false, name = "end_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
+
+    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL)
+    private List<PastoralVisit> pastoralVisits = new ArrayList<>();
 }

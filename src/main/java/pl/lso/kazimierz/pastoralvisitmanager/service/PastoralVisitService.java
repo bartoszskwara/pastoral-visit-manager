@@ -8,9 +8,11 @@ import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVis
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.PastoralVisit;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Priest;
+import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Season;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.PastoralVisitRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.PriestRepository;
+import pl.lso.kazimierz.pastoralvisitmanager.repository.SeasonRepository;
 
 import java.util.Optional;
 
@@ -21,14 +23,16 @@ public class PastoralVisitService {
     private PastoralVisitRepository pastoralVisitRepository;
     private ApartmentRepository apartmentRepository;
     private PriestRepository priestRepository;
+    private final SeasonRepository seasonRepository;
 
     @Autowired
     public PastoralVisitService(PastoralVisitRepository pastoralVisitRepository,
                                 ApartmentRepository apartmentRepository,
-                                PriestRepository priestRepository) {
+                                PriestRepository priestRepository, SeasonRepository seasonRepository) {
         this.pastoralVisitRepository = pastoralVisitRepository;
         this.apartmentRepository = apartmentRepository;
         this.priestRepository = priestRepository;
+        this.seasonRepository = seasonRepository;
     }
 
     public PastoralVisit savePastoralVisit(PastoralVisitDto pastoralVisitDto) {
@@ -42,6 +46,10 @@ public class PastoralVisitService {
         Optional<Priest> priest = priestRepository.findById(pastoralVisitDto.getPriestId());
         if(!priest.isPresent()) {
             throw new NotFoundException("Priest not found");
+        }
+        Optional<Season> season = seasonRepository.findById(pastoralVisitDto.getSeasonId());
+        if(!season.isPresent()) {
+            throw new NotFoundException("Season not found");
         }
 
         if(pastoralVisitDto.getId() != null) {
@@ -57,6 +65,7 @@ public class PastoralVisitService {
         newPastoralVisit.setValue(mapStatus(pastoralVisitDto.getValue()));
         newPastoralVisit.setApartment(apartment.get());
         newPastoralVisit.setPriest(priest.get());
+        newPastoralVisit.setSeason(season.get());
         return pastoralVisitRepository.save(newPastoralVisit);
     }
 

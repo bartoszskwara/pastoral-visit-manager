@@ -150,7 +150,8 @@ export class AddressDetailsComponent implements OnInit {
         apartmentId: apartment.id,
         date: this.edit.newPastoralVisit.date.hours(19).format(this.env.dateFormat()),
         value: status,
-        priestId: this.edit.newPastoralVisit.priestId
+        priestId: this.edit.newPastoralVisit.priestId,
+        seasonId: season.id
       };
 
       this.pastoralVisitService.savePastoralVisit(pastoralVisit, this.getApplicationJsonHeaders())
@@ -189,7 +190,7 @@ export class AddressDetailsComponent implements OnInit {
       return null;
     }
     for(let visit of apartment.pastoralVisits) {
-      if(this.seasonIncludesDate(season, moment(visit.date, this.env.dateFormat()))) {
+      if(visit.seasonId == season.id) {
         return visit.value;
       }
     }
@@ -200,7 +201,7 @@ export class AddressDetailsComponent implements OnInit {
     let count = 0;
     for(let apartment of this.address.apartments) {
       for(let visit of apartment.pastoralVisits) {
-        if(this.seasonIncludesDate(season, moment(visit.date, this.env.dateFormat())) && this.VISIT_COMPLETED_STATUS.includes(visit.value)) {
+        if(visit.seasonId == season.id && this.VISIT_COMPLETED_STATUS.includes(visit.value)) {
           count++;
         }
       }
@@ -236,7 +237,8 @@ export class AddressDetailsComponent implements OnInit {
         date: moment(visit.date, this.env.dateFormat()).format(this.env.dateFormat()),
         value: status,
         apartmentId: apartment.id,
-        priestId: visit.priestId
+        priestId: visit.priestId,
+        seasonId: season.id
       }
     }
     else {
@@ -270,7 +272,7 @@ export class AddressDetailsComponent implements OnInit {
 
   private getPastoralVisitFromSeason(apartment: Apartment, season: Season) {
     for(let visit of apartment.pastoralVisits) {
-      if(this.seasonIncludesDate(season, moment(visit.date, this.env.dateFormat()))) {
+      if(visit.seasonId == season.id) {
         return visit;
       }
     }

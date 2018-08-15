@@ -48,6 +48,10 @@ import {AddressService} from "./address/service/address.service";
 import { BulkExportComponent } from './export-address/bulk-export/bulk-export.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatBadgeModule} from '@angular/material/badge';
+import { BulkImportComponent } from './bulk-import/bulk-import.component';
+import {ImportService} from "./bulk-import/import-service/import-service.service";
+import {DragAndDropComponent} from "./bulk-import/drag-and-drop/drag-and-drop.component";
 
 @NgModule({
   imports: [
@@ -76,7 +80,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatSliderModule,
     MatChipsModule,
     MatTabsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatBadgeModule
   ],
   declarations: [
     DashboardComponent,
@@ -91,7 +96,10 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     AddAddressComponent,
     EditAddressComponent,
     AddressFormComponent,
-    BulkExportComponent],
+    BulkExportComponent,
+    BulkImportComponent,
+    DragAndDropComponent
+  ],
   entryComponents: [PastoralVisitDialog],
   providers: [AddressDetailsService,
     SeasonService,
@@ -100,6 +108,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     ExportAddressService,
     AddressService,
     AddAddressService,
-    EditAddressService]
+    EditAddressService,
+    ImportService
+  ]
 })
 export class MainModule { }

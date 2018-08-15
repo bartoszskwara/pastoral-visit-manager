@@ -22,8 +22,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
@@ -45,6 +47,7 @@ public class GeneratorService {
     private final SeasonRepository seasonRepository;
 
     private List<Priest> priests;
+    private List<Season> seasons;
 
     @Autowired
     public GeneratorService(AddressRepository addressRepository, ApartmentRepository apartmentRepository, PastoralVisitRepository pastoralVisitRepository, PriestRepository priestRepository, SeasonRepository seasonRepository) {
@@ -103,6 +106,8 @@ public class GeneratorService {
         seasonRepository.save(s2);
         seasonRepository.save(s3);
         seasonRepository.save(s4);
+        seasons = new ArrayList<>();
+        seasons.addAll(asList(s1, s2, s3, s4));
     }
 
     public void generate() throws URISyntaxException, IOException, ParseException {
@@ -167,19 +172,16 @@ public class GeneratorService {
 
     private List<PastoralVisit> generatePastoralVisits(Apartment apartment) throws ParseException {
         List<PastoralVisit> pastoralVisits = new ArrayList<>();
-        List<String> months = asList("01", "02", "12");
 
-        for(int year : new Integer[]{2014, 2015, 2016, 2017}) {
-            String randomDateString = year + "-" + months.get(nextInt(0, months.size())) + "-" + nextInt(1, 28);
-
+        for (Season season : seasons) {
             PastoralVisit pastoralVisit = new PastoralVisit();
-            pastoralVisit.setDate(parseDate(randomDateString, "yyyy-mm-dd"));
+            pastoralVisit.setDate(season.getStartDate());
             pastoralVisit.setValue(PastoralVisitStatus.values()[nextInt(0, PastoralVisitStatus.values().length)].getStatus());
             pastoralVisit.setPriest(priests.get(nextInt(0, priests.size())));
             pastoralVisit.setApartment(apartment);
+            pastoralVisit.setSeason(season);
             pastoralVisitRepository.save(pastoralVisit);
         }
-
         return pastoralVisits;
     }
 

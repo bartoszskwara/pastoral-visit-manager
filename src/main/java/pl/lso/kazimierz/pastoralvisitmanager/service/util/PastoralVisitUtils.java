@@ -6,7 +6,6 @@ import pl.lso.kazimierz.pastoralvisitmanager.model.entity.PastoralVisit;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Season;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
-import static pl.lso.kazimierz.pastoralvisitmanager.service.util.SeasonUtils.seasonIncludesDate;
 
 public class PastoralVisitUtils {
 
@@ -15,7 +14,7 @@ public class PastoralVisitUtils {
             return null;
         }
         for(PastoralVisit pastoralVisit : apartment.getPastoralVisits()) {
-            if(seasonIncludesDate(season, pastoralVisit.getDate())) {
+            if(pastoralVisit.getSeason() != null && pastoralVisit.getSeason().getId().equals(season.getId())) {
                 return PastoralVisitStatus.getByStatus(pastoralVisit.getValue());
             }
         }

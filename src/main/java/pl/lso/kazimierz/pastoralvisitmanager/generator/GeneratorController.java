@@ -1,4 +1,4 @@
-package pl.lso.kazimierz.pastoralvisitmanager.controller;
+package pl.lso.kazimierz.pastoralvisitmanager.generator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

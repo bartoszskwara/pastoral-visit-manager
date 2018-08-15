@@ -19,7 +19,6 @@ import java.util.Date;
 public class PastoralVisitDto {
     private Long id;
 
-    @NotNull(message = "Date cannot be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss Z")
     private Date date;
 
@@ -32,4 +31,7 @@ public class PastoralVisitDto {
 
     @NotNull(message = "Priest ID cannot be null")
     private Long priestId;
+
+    @NotNull(message = "Season ID cannot be null")
+    private Long seasonId;
 }

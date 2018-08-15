@@ -25,7 +25,13 @@ export class ExportAddressService {
   }
 
   exportBulkCsv(data: SelectedAddressDto[]) {
+    console.log('export', data);
     return this.http.post(`${this.exportUrl}/address/bulk/format/csv`, data, this.getResponseTypeBlobOptions());
+  }
+
+  exportBulkPdf(data: SelectedAddressDto[]) {
+    console.log('export', data);
+    return this.http.post(`${this.exportUrl}/address/bulk/format/pdf`, data, this.getResponseTypeBlobOptions());
   }
 
   downloadFile(url: string, options: object): Observable<Blob> {

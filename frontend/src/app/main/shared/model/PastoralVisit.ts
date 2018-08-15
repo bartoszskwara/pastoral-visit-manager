@@ -4,4 +4,5 @@ export class PastoralVisit {
   date: string;
   value: string;
   priestId: number;
+  seasonId: number;
 }

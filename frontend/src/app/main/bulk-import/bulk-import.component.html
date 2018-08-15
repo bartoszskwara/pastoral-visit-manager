@@ -1,0 +1,30 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <h1 class="mat-headline">Import</h1>
+      <h2 *ngIf="loading">Importing...</h2>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="import-form">
+        <mat-form-field>
+          <input matInput placeholder="Street name" value="{{importRequestFormControl.streetName.value}}" [formControl]="importRequestFormControl.streetName" required>
+          <mat-error *ngIf="importRequestFormControl.streetName.invalid">{{getStreetNameErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Block number" value="{{importRequestFormControl.blockNumber.value}}" [formControl]="importRequestFormControl.blockNumber" required>
+          <mat-error *ngIf="importRequestFormControl.blockNumber.invalid">{{getBlockNumberErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select [(value)]="importRequestFormControl.priestId" placeholder="Priest">
+            <mat-option value="0">Unknown</mat-option>
+            <mat-option *ngFor="let priest of priests" [value]="priest.id">{{priest.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="drop-zone">
+          <drag-and-drop (uploaded)="fileUploaded($event)"></drag-and-drop>
+        </div>
+        <button mat-raised-button color="primary" (click)="send()">Import</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

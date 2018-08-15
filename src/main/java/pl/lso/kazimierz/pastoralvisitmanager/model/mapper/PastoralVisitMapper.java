@@ -12,6 +12,7 @@ public class PastoralVisitMapper {
                 .value(pastoralVisit.getValue())
                 .priestId(pastoralVisit.getPriest().getId())
                 .apartmentId(pastoralVisit.getApartment().getId())
+                .seasonId(pastoralVisit.getSeason().getId())
                 .build();
     }
 }

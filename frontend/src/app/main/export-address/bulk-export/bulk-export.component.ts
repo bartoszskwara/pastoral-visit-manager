@@ -16,6 +16,7 @@ export interface Filter {
 export class SelectedAddress {
   address: SimpleAddress;
   seasons: Season[]
+  emptyColumnsCount: number;
 }
 
 @Component({
@@ -30,7 +31,7 @@ export class BulkExportComponent implements OnInit {
   loading: boolean;
   page: number;
   size: number;
-  displayedColumns: string[] = ['select', 'address', 'season'];
+  displayedColumns: string[] = ['select', 'address', 'season', 'add-empty-column'];
   filter: Filter;
   selection = new SelectionModel<SimpleAddress>(true, []);
   selectedAddresses: SelectedAddress[] = [];
@@ -110,8 +111,24 @@ export class BulkExportComponent implements OnInit {
         });
   }
 
-  export(): void {
+  exportCsv(): void {
     this.exportService.exportBulkCsv(this.prepareSelectedAddresses())
+      .subscribe(res => {
+        console.log('start download:');
+        console.log(res);
+        let blob = new Blob([res], { type: 'application/zip' });
+        let url= window.URL.createObjectURL(blob);
+        window.open(url);
+      }, error => {
+        console.log('download error:');
+        console.log(error);
+      }, () => {
+        console.log('Completed file download.')
+      });
+  }
+
+  exportPdf(): void {
+    this.exportService.exportBulkPdf(this.prepareSelectedAddresses())
       .subscribe(res => {
         console.log('start download:');
         console.log(res);
@@ -167,7 +184,8 @@ export class BulkExportComponent implements OnInit {
   static createSelectedAddress(address: SimpleAddress, seasons: Season[]): SelectedAddress {
     return {
       address: address,
-      seasons: seasons
+      seasons: seasons,
+      emptyColumnsCount: 0
     }
   }
 
@@ -221,7 +239,7 @@ export class BulkExportComponent implements OnInit {
     }
     index = this.selectedAddresses.map(a => a.address.id).indexOf(address.id);
     selectedAddress = this.selectedAddresses[index];
-    if(selectedAddress.seasons.length == 0) {
+    if(selectedAddress.seasons.length == 0 && selectedAddress.emptyColumnsCount == 0) {
       this.markSelected(false, address, []);
     }
   }
@@ -231,11 +249,38 @@ export class BulkExportComponent implements OnInit {
     this.selectedAddresses.forEach(a => {
       let dto = {
         addressId: a.address.id,
-        seasons: a.seasons.map(s => s.id)
+        seasons: a.seasons.map(s => s.id),
+        emptyColumnsCount: a.emptyColumnsCount
       };
       result.push(dto);
     });
     return result;
   }
 
+  addEmptyColumn(address: SimpleAddress) {
+    let index = this.selectedAddresses.map(a => a.address.id).indexOf(address.id);
+    if(index > -1) {
+      this.selectedAddresses[index].emptyColumnsCount++;
+    }
+    else {
+      this.markSelected(true, address, []);
+      let i = this.selectedAddresses.map(a => a.address.id).indexOf(address.id);
+      this.selectedAddresses[i].emptyColumnsCount++;
+    }
+  }
+
+  removeEmptyColumn(address: SimpleAddress) {
+    let index = this.selectedAddresses.map(a => a.address.id).indexOf(address.id);
+    if(index > -1) {
+      this.selectedAddresses[index].emptyColumnsCount--;
+    }
+  }
+
+  mapNumberOfEmptyColumnsToCollection(address: SimpleAddress): number[] {
+    let index = this.selectedAddresses.map(a => a.address.id).indexOf(address.id);
+    if(index > -1) {
+      return Array(this.selectedAddresses[index].emptyColumnsCount).fill(1);
+    }
+    return [];
+  }
 }

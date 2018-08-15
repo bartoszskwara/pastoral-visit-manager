@@ -10,4 +10,5 @@ import java.util.List;
 public class SelectedAddressDto {
     private Long addressId;
     private List<Long> seasons;
+    private Integer emptyColumnsCount;
 }

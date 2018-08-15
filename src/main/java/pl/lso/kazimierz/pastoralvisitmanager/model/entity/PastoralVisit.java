@@ -28,7 +28,7 @@ public class PastoralVisit {
     @Column(nullable = false, name = "value")
     private String value;
 
-    @Column(nullable = false, name = "date")
+    @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
@@ -39,4 +39,8 @@ public class PastoralVisit {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "priest_id", nullable = false)
     private Priest priest;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "season_id", nullable = false)
+    private Season season;
 }

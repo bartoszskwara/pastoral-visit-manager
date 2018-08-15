@@ -1,7 +1,8 @@
 package pl.lso.kazimierz.pastoralvisitmanager.service.export;
 
 public enum ExportFileFormat {
-    CSV("csv");
+    CSV("csv"),
+    PDF("pdf");
 
     private String name;
 

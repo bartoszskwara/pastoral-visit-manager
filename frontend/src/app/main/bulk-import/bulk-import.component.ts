@@ -7,6 +7,7 @@ import {PriestService} from "../shared/service/priest/priest.service";
 import {AddressService} from "../address/service/address.service";
 import {Observable, of} from "rxjs/index";
 import {map, startWith, tap} from "rxjs/internal/operators";
+import {SimpleAddress} from "../home/model/SimpleAddress";
 
 export class ImportRequestFormControl {
   streetName: FormControl;
@@ -15,7 +16,8 @@ export class ImportRequestFormControl {
 }
 
 export interface FilteredOptions {
-  streetName: Observable<string[]>
+  streetName: Observable<string[]>,
+  blockNumber: Observable<string[]>
 }
 
 @Component({
@@ -28,9 +30,12 @@ export class BulkImportComponent implements OnInit {
   private importRequestFile: File = null;
   loading: boolean = false;
   streetNames: string[] = [];
+  blockNumbers: string[] = [];
   filteredOptions: FilteredOptions = {
-    streetName: of([])
+    streetName: of([]),
+    blockNumber: of([])
   };
+  private addresses: SimpleAddress[] = [];
 
   importRequestFormControl: ImportRequestFormControl = {
     streetName: new FormControl('', [Validators.required]),
@@ -44,11 +49,18 @@ export class BulkImportComponent implements OnInit {
 
   ngOnInit() {
     this.getAvailablePriests();
-    this.getStreetNames();
+    this.getAddresses();
     this.filteredOptions.streetName = this.importRequestFormControl.streetName.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filter(value))
+        map(value => this._filterStreetName(value)),
+        tap(() => this.updateBlockNumbers())
+      );
+    this.filteredOptions.blockNumber = this.importRequestFormControl.blockNumber.valueChanges
+      .pipe(
+        tap(() => this.updateBlockNumbers()),
+        startWith(''),
+        map(value => this._filterBlockNumber(value))
       );
   }
 
@@ -73,19 +85,25 @@ export class BulkImportComponent implements OnInit {
         });
   }
 
-  private getStreetNames(): void {
+  private getAddresses(): void {
     this.addressService.fetchAllAddresses()
       .subscribe(
         response => {
-          this.streetNames = response.map(a => a.streetName);
+          this.addresses = response;
         },
         error => {
           console.log('error');
           console.log(error);
         },
         () => {
+          this.streetNames = this.getStreetNames();
           console.log('street names fetched');
         });
+  }
+
+  private getStreetNames(): string[] {
+    let names = this.addresses.map(a => a.streetName);
+    return Array.from(new Set(names));
   }
 
   private prepareData(): FormData {
@@ -135,8 +153,18 @@ export class BulkImportComponent implements OnInit {
     this.importRequestFile = null;
   }
 
-  private _filter(value: string): string[] {
+  private _filterStreetName(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.streetNames.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  private _filterBlockNumber(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.blockNumbers.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  updateBlockNumbers(): void {
+    let streetName = this.importRequestFormControl.streetName.value;
+    this.blockNumbers = this.addresses.filter(a => a.streetName == streetName).map(a => a.blockNumber);
   }
 }

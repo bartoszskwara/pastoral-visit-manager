@@ -7,16 +7,20 @@
     <mat-card-content>
       <div class="import-form">
         <mat-form-field>
-          <input type="text" placeholder="Street name" aria-label="Street name" matInput [formControl]="importRequestFormControl.streetName" [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete">
+          <input type="text" placeholder="Street name" aria-label="Street name" matInput [formControl]="importRequestFormControl.streetName" [matAutocomplete]="auto1">
+          <mat-autocomplete #auto1="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions.streetName | async" [value]="option">
               {{option}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Block number" value="{{importRequestFormControl.blockNumber.value}}" [formControl]="importRequestFormControl.blockNumber" required>
-          <mat-error *ngIf="importRequestFormControl.blockNumber.invalid">{{getBlockNumberErrorMessage()}}</mat-error>
+          <input type="text" placeholder="Block number" aria-label="Block number" matInput [formControl]="importRequestFormControl.blockNumber" [matAutocomplete]="auto2">
+          <mat-autocomplete #auto2="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions.blockNumber | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
         <mat-form-field>
           <mat-select [(value)]="importRequestFormControl.priestId" placeholder="Priest">

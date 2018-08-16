@@ -21,9 +21,16 @@ export class AddressService {
       .append('page', page ? page.toString() : '0')
       .append('size', size ? size.toString() : '0')
       .append('name', name);
-    return this.http.get<Page<SimpleAddress>>(this.addressUrl, {params: params})
+    return this.http.get<Page<SimpleAddress>>(`${this.addressUrl}/chunk`, {params: params})
       .pipe(
-        catchError(this.handleError<Page<SimpleAddress>>("get addresses", new Page()))
+        catchError(this.handleError<Page<SimpleAddress>>("get addresses chunk", new Page()))
+      );
+  }
+
+  fetchAllAddresses() : Observable<SimpleAddress[]> {
+    return this.http.get<SimpleAddress[]>(this.addressUrl)
+      .pipe(
+        catchError(this.handleError<SimpleAddress[]>("get addresses", []))
       );
   }
 

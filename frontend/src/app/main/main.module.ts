@@ -52,6 +52,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { BulkImportComponent } from './bulk-import/bulk-import.component';
 import {ImportService} from "./bulk-import/import-service/import-service.service";
 import {DragAndDropComponent} from "./bulk-import/drag-and-drop/drag-and-drop.component";
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import {DragAndDropComponent} from "./bulk-import/drag-and-drop/drag-and-drop.co
     MatChipsModule,
     MatTabsModule,
     MatCheckboxModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatAutocompleteModule
   ],
   declarations: [
     DashboardComponent,

@@ -14,6 +14,7 @@ import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentRepository;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +35,11 @@ public class AddressService {
         this.apartmentRepository = apartmentRepository;
     }
 
-    public Page<Address> getAllAddresses(Pageable pageable, String name) {
+    public List<Address> getAllAddresses() {
+        return addressRepository.findAll();
+    }
+
+    public Page<Address> getChunk(Pageable pageable, String name) {
         return addressRepository.findAllByName(pageable, name);
     }
 

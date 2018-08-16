@@ -21,6 +21,11 @@ import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.mapper.AddressMapper;
 import pl.lso.kazimierz.pastoralvisitmanager.service.AddressService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @RequestMapping("/address")
 public class AddressController {
@@ -33,8 +38,14 @@ public class AddressController {
     }
 
     @GetMapping({"", "/"})
-    public ResponseEntity getAllAddresses(@PageableDefault(sort = {"streetName", "blockNumber"}, direction = Sort.Direction.ASC, value = 5) Pageable pageable, @RequestParam("name") String name) {
-        Page<SimpleAddressDto> addressDtos = addressService.getAllAddresses(pageable, name).map(AddressMapper::mapSimple);
+    public ResponseEntity getAllAddresses() {
+        List<SimpleAddressDto> addressDtos = addressService.getAllAddresses().stream().map(AddressMapper::mapSimple).collect(toList());
+        return ResponseEntity.ok(addressDtos);
+    }
+
+    @GetMapping("/chunk")
+    public ResponseEntity getChunk(@PageableDefault(sort = {"streetName", "blockNumber"}, direction = Sort.Direction.ASC, value = 5) Pageable pageable, @RequestParam("name") String name) {
+        Page<SimpleAddressDto> addressDtos = addressService.getChunk(pageable, name).map(AddressMapper::mapSimple);
         return ResponseEntity.ok(addressDtos);
     }
 

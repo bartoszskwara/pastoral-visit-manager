@@ -4,6 +4,9 @@ import {Priest} from "../shared/model/Priest";
 import {FormControl, Validators} from "@angular/forms";
 import {AddressFormComponent} from "../address/address-form/address-form.component";
 import {PriestService} from "../shared/service/priest/priest.service";
+import {AddressService} from "../address/service/address.service";
+import {Observable, of} from "rxjs/index";
+import {map, startWith, tap} from "rxjs/internal/operators";
 
 export class ImportRequestFormControl {
   streetName: FormControl;
@@ -11,6 +14,9 @@ export class ImportRequestFormControl {
   priestId: number;
 }
 
+export interface FilteredOptions {
+  streetName: Observable<string[]>
+}
 
 @Component({
   selector: 'bulk-import',
@@ -21,6 +27,10 @@ export class BulkImportComponent implements OnInit {
 
   private importRequestFile: File = null;
   loading: boolean = false;
+  streetNames: string[] = [];
+  filteredOptions: FilteredOptions = {
+    streetName: of([])
+  };
 
   importRequestFormControl: ImportRequestFormControl = {
     streetName: new FormControl('', [Validators.required]),
@@ -30,10 +40,16 @@ export class BulkImportComponent implements OnInit {
 
   priests: Priest[] = [];
 
-  constructor(private importService: ImportService, private priestService: PriestService) { }
+  constructor(private importService: ImportService, private addressService: AddressService, private priestService: PriestService) { }
 
   ngOnInit() {
     this.getAvailablePriests();
+    this.getStreetNames();
+    this.filteredOptions.streetName = this.importRequestFormControl.streetName.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
   }
 
   send() {
@@ -54,6 +70,21 @@ export class BulkImportComponent implements OnInit {
           this.loading = false;
           console.log('imported');
           this.resetAll();
+        });
+  }
+
+  private getStreetNames(): void {
+    this.addressService.fetchAllAddresses()
+      .subscribe(
+        response => {
+          this.streetNames = response.map(a => a.streetName);
+        },
+        error => {
+          console.log('error');
+          console.log(error);
+        },
+        () => {
+          console.log('street names fetched');
         });
   }
 
@@ -102,5 +133,10 @@ export class BulkImportComponent implements OnInit {
     this.importRequestFormControl.blockNumber.reset();
     this.importRequestFormControl.priestId = this.getCurrentLoggedPriestId();
     this.importRequestFile = null;
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.streetNames.filter(option => option.toLowerCase().includes(filterValue));
   }
 }

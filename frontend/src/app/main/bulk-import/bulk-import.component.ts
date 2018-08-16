@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ImportService} from "./import-service/import-service.service";
 import {Priest} from "../shared/model/Priest";
 import {FormControl, Validators} from "@angular/forms";
@@ -8,6 +8,7 @@ import {AddressService} from "../address/service/address.service";
 import {Observable, of} from "rxjs/index";
 import {map, startWith, tap} from "rxjs/internal/operators";
 import {SimpleAddress} from "../home/model/SimpleAddress";
+import {DragAndDropComponent} from "./drag-and-drop/drag-and-drop.component";
 
 export class ImportRequestFormControl {
   streetName: FormControl;
@@ -36,6 +37,7 @@ export class BulkImportComponent implements OnInit {
     blockNumber: of([])
   };
   private addresses: SimpleAddress[] = [];
+  @ViewChild(DragAndDropComponent) dragAndDrop;
 
   importRequestFormControl: ImportRequestFormControl = {
     streetName: new FormControl('', [Validators.required]),
@@ -147,10 +149,11 @@ export class BulkImportComponent implements OnInit {
   }
 
   private resetAll(): void {
-    this.importRequestFormControl.streetName.reset();
-    this.importRequestFormControl.blockNumber.reset();
+    this.importRequestFormControl.streetName.setValue('');
+    this.importRequestFormControl.blockNumber.setValue('');
     this.importRequestFormControl.priestId = this.getCurrentLoggedPriestId();
     this.importRequestFile = null;
+    this.dragAndDrop.resetFile();
   }
 
   private _filterStreetName(value: string): string[] {

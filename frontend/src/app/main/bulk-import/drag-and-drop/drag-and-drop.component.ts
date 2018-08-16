@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AddressDto} from "../../shared/model/AddressDto";
+import {FileChangeEvent} from "@angular/compiler-cli/src/perform_watch";
 
 @Component({
   selector: 'drag-and-drop',
@@ -9,6 +10,8 @@ import {AddressDto} from "../../shared/model/AddressDto";
 export class DragAndDropComponent implements OnInit {
 
   @Output() uploaded = new EventEmitter<File>();
+  file: File = null;
+  acceptedFormats: string[] = ['csv'];
 
   constructor() { }
 
@@ -28,10 +31,12 @@ export class DragAndDropComponent implements OnInit {
       if (event.dataTransfer.items[0].kind === 'file') {
         let file = event.dataTransfer.items[0].getAsFile();
         this.emit(file);
+        this.file = file;
       }
     } else if(event.dataTransfer.files.length == 1) {
       let file = event.dataTransfer.files[0];
       this.emit(file);
+      this.file = file;
     } else {
       this.emit(null);
     }
@@ -45,11 +50,41 @@ export class DragAndDropComponent implements OnInit {
   }
 
   private removeDragData(event: DragEvent) {
-    console.log('Removing drag data')
+    console.log('Removing drag data');
     if (event.dataTransfer.items) {
       event.dataTransfer.items.clear();
     } else {
       event.dataTransfer.clearData();
     }
+  }
+
+  fileSelected(event: any) {
+    if(event != null && event.target.files.length == 1) {
+      let file = event.target.files[0];
+      if(this.isAcceptedFormat(file.name)) {
+        this.emit(file);
+        this.file = file;
+      } else {
+        console.log('format not accepted');
+      }
+    }
+  }
+
+  removeFile() {
+    this.file = null;
+  }
+
+  isAcceptedFormat(filename: string): boolean {
+    let format = filename.split(".").pop();
+    for(let f of this.acceptedFormats) {
+      if(format == f) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  resetFile(): void {
+    this.file = null;
   }
 }

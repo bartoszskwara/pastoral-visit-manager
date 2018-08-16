@@ -13,6 +13,7 @@
               {{option}}
             </mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="importRequestFormControl.streetName.invalid">{{getStreetNameErrorMessage()}}</mat-error>
         </mat-form-field>
         <mat-form-field>
           <input type="text" placeholder="Block number" aria-label="Block number" matInput [formControl]="importRequestFormControl.blockNumber" [matAutocomplete]="auto2">
@@ -21,6 +22,7 @@
               {{option}}
             </mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="importRequestFormControl.blockNumber.invalid">{{getStreetNameErrorMessage()}}</mat-error>
         </mat-form-field>
         <mat-form-field>
           <mat-select [(value)]="importRequestFormControl.priestId" placeholder="Priest">

@@ -1,59 +1,10 @@
-table {
-  width: 100%;
-
-
-  td {
-    cursor: pointer;
-  }
-
-  tr {
-    &:hover td {
-      background: rgba(255, 255, 255, 0.05);
-    }
-  }
-}
-
-.position-relative {
-  position: relative;
-}
-
 add-address-button {
   position: fixed;
   right: 40px;
   bottom: 40px;
   z-index: 100;
 }
-.container {
 
-  .loading {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-
-    padding: 20px;
-    z-index: 500;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .filter {
-    padding: 10px 0 0 10px;
-    background: lightslategrey;
-  }
-
-  .color-light {
-    color: rgba(255,255,255,.7);
-  }
-
-  .edit {
-    &:hover mat-icon {
-      color: white;
-    }
-  }
+.position-relative {
+  position: relative;
 }
-

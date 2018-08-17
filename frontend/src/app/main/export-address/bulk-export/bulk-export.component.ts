@@ -15,7 +15,7 @@ export interface Filter {
 }
 export class SelectedAddress {
   address: SimpleAddress;
-  seasons: Season[]
+  seasons: Season[];
   emptyColumnsCount: number;
 }
 
@@ -27,7 +27,7 @@ export class SelectedAddress {
 export class BulkExportComponent implements OnInit {
 
   private readonly INITIAL_SIZE: number = 20;
-  addresses: SimpleAddress[];
+  addresses: SimpleAddress[] = [];
   loading: boolean;
   page: number;
   size: number;
@@ -64,11 +64,14 @@ export class BulkExportComponent implements OnInit {
     this.addressService.fetchAddresses(page, size, filter.name)
       .subscribe(
         response => {
-          this.addresses = this.addresses.concat(response.content);
+          if(response.content) {
+            this.addresses = this.addresses.concat(response.content);
+          }
         },
         error => {
           console.log('error');
           console.log(error);
+          this.addresses = [];
           this.loading = false;
         },
         () => {

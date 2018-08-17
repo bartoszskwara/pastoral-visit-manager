@@ -11,6 +11,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 
@@ -53,6 +54,8 @@ import { BulkImportComponent } from './bulk-import/bulk-import.component';
 import {ImportService} from "./bulk-import/import-service/import-service.service";
 import {DragAndDropComponent} from "./bulk-import/drag-and-drop/drag-and-drop.component";
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSnackBarModule} from "@angular/material";
+import { AddressesListComponent } from './addresses-list/addresses-list.component';
 
 @NgModule({
   imports: [
@@ -83,7 +86,9 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatTabsModule,
     MatCheckboxModule,
     MatBadgeModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   declarations: [
     DashboardComponent,
@@ -100,7 +105,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     AddressFormComponent,
     BulkExportComponent,
     BulkImportComponent,
-    DragAndDropComponent
+    DragAndDropComponent,
+    AddressesListComponent
   ],
   entryComponents: [PastoralVisitDialog],
   providers: [AddressDetailsService,

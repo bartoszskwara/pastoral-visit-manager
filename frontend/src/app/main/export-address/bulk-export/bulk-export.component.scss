@@ -24,3 +24,16 @@ mat-button-toggle {
 .margin-left {
   margin-left: 5px;
 }
+
+
+.container {
+
+  .loading {
+    z-index: 500;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

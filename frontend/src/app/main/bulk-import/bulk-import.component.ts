@@ -66,7 +66,11 @@ export class BulkImportComponent implements OnInit {
       );
   }
 
-  send() {
+  send(): void {
+    if(!this.isImportRequestValid()) {
+      console.log('error', 'messageService');
+      return;
+    }
     let data = this.prepareData();
     console.log('data', data);
     this.loading = true;
@@ -169,5 +173,12 @@ export class BulkImportComponent implements OnInit {
   updateBlockNumbers(): void {
     let streetName = this.importRequestFormControl.streetName.value;
     this.blockNumbers = this.addresses.filter(a => a.streetName == streetName).map(a => a.blockNumber);
+  }
+
+  private isImportRequestValid(): boolean {
+    return this.importRequestFormControl.streetName.valid
+    && this.importRequestFormControl.blockNumber.valid
+    && this.importRequestFormControl.priestId >= 0
+    && this.importRequestFile != null;
   }
 }

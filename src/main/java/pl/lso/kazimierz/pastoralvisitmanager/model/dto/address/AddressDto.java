@@ -12,6 +12,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDto {
     private Long id;
+    private String prefix;
     private String streetName;
     private String blockNumber;
     private List<ApartmentDto> apartments;

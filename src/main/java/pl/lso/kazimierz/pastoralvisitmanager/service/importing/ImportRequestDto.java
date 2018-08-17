@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class ImportRequestDto {
 
+    private String prefix;
     private String streetName;
     private String blockNumber;
     private Long priestId;

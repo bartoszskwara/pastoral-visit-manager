@@ -12,6 +12,8 @@ import java.util.List;
 @NotNull(message = "Address data not found")
 public class AddressData {
 
+    private String prefix;
+
     @NotNull(message = "Street name cannot be null")
     @Size(min=1, message = "Street name cannot be blank")
     private String streetName;

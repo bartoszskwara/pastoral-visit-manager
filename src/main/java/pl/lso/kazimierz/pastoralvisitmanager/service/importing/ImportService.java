@@ -82,13 +82,14 @@ public class ImportService {
         }
         Address address = addressRepository.findByStreetNameIgnoreCaseAndBlockNumberIgnoreCase(request.getStreetName(), request.getBlockNumber());
         if(address == null) {
-            address = createAddress(request.getStreetName(), request.getBlockNumber());
+            address = createAddress(request.getPrefix(), request.getStreetName(), request.getBlockNumber());
         }
         updateAddress(address, request.getFile(), priest.get());
     }
 
-    private Address createAddress(String streetName, String blockNumber) {
+    private Address createAddress(String prefix, String streetName, String blockNumber) {
         Address address = new Address();
+        address.setPrefix(prefix);
         address.setStreetName(streetName);
         address.setBlockNumber(blockNumber);
         return addressRepository.save(address);

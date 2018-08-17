@@ -16,6 +16,6 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     Address findByStreetNameIgnoreCaseAndBlockNumberIgnoreCase(String streetName, String blockNumber);
 
-    @Query("SELECT a FROM Address a WHERE LOWER(CONCAT(a.streetName, ' ', a.blockNumber)) LIKE CONCAT('%',LOWER(:name),'%')")
+    @Query("SELECT a FROM Address a WHERE LOWER(CONCAT(a.prefix, ' ', a.streetName, ' ', a.blockNumber)) LIKE CONCAT('%',LOWER(:name),'%')")
     Page<Address> findAllByName(Pageable pageable, @Param("name") String name);
 }

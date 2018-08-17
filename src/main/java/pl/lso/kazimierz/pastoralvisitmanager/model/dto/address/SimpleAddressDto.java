@@ -9,6 +9,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SimpleAddressDto {
     private Long id;
+    private String prefix;
     private String streetName;
     private String blockNumber;
     private Integer apartmentCount;

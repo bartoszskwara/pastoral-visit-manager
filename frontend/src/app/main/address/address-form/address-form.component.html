@@ -1,5 +1,8 @@
 <div class="form-container">
   <mat-form-field>
+    <input matInput placeholder="Prefix" value="{{address != null ? address.prefix : defaultPrefix}}" [formControl]="addressData.prefix.control">
+  </mat-form-field>
+  <mat-form-field>
     <input matInput placeholder="Street name" value="{{address.streetName}}" [formControl]="addressData.streetName.control" required>
     <mat-error *ngIf="addressData.streetName.control.invalid">{{getStreetNameErrorMessage()}}</mat-error>
   </mat-form-field>

@@ -16,6 +16,7 @@ export class AddressFormComponent implements OnInit {
   @Input() address: Address;
   @Output() save = new EventEmitter<AddressDto>();
 
+  defaultPrefix: string = 'ul.';
   separatorKeyCodes = [ENTER, COMMA, SPACE];
   addressData: AddressFormControl;
 
@@ -27,6 +28,9 @@ export class AddressFormComponent implements OnInit {
     }
     let apartments = this.splitApartments();
     this.addressData = {
+      prefix: {
+        control: new FormControl(this.address.prefix, [Validators.required])
+      },
       streetName: {
         control: new FormControl(this.address.streetName, [Validators.required])
       },
@@ -45,7 +49,6 @@ export class AddressFormComponent implements OnInit {
         chips: apartments.excluded
       }
     };
-
   }
 
   createChip(event: MatChipInputEvent, data: {control: FormControl; chips: string[]}): void {
@@ -65,7 +68,7 @@ export class AddressFormComponent implements OnInit {
   }
 
   saveButtonClicked(addressData: AddressFormControl) {
-    if(addressData.streetName.control.invalid || addressData.blockNumber.control.invalid
+    if(addressData.prefix.control.invalid || addressData.streetName.control.invalid || addressData.blockNumber.control.invalid
       || addressData.included.control.invalid || addressData.excluded.control.invalid) {
       return;
     }
@@ -81,7 +84,9 @@ export class AddressFormComponent implements OnInit {
     for(let excluded of newAddress.excluded.chips) {
       apartments.splice(apartments.indexOf(excluded), 1);
     }
+
     return {
+      prefix: newAddress.prefix.control.value,
       streetName: newAddress.streetName.control.value,
       blockNumber: newAddress.blockNumber.control.value,
       apartments: apartments

@@ -23,6 +23,9 @@ public class Address {
     @Column(nullable = false, name = "id")
     private Long id;
 
+    @Column(name = "prefix")
+    private String prefix;
+
     @Column(nullable = false, name = "street_name")
     private String streetName;
 

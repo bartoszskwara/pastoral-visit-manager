@@ -71,7 +71,7 @@ public class PdfExportService extends ZipExportService {
     }
 
     private Paragraph createStreetName(Address address) {
-        Paragraph title = new Paragraph(String.format("%s %s", address.getStreetName(), address.getBlockNumber()), DEFAULT_FONT);
+        Paragraph title = new Paragraph(String.format("%s %s %s", address.getPrefix(), address.getStreetName(), address.getBlockNumber()), DEFAULT_FONT);
         title.setAlignment(Element.ALIGN_LEFT);
         return title;
     }

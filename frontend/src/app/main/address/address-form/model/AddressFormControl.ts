@@ -1,6 +1,9 @@
 import {FormControl} from "@angular/forms";
 
 export class AddressFormControl {
+  prefix: {
+    control: FormControl
+  };
   streetName: {
     control: FormControl
   };

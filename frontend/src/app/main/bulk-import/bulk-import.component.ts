@@ -11,6 +11,7 @@ import {SimpleAddress} from "../home/model/SimpleAddress";
 import {DragAndDropComponent} from "./drag-and-drop/drag-and-drop.component";
 
 export class ImportRequestFormControl {
+  prefix: FormControl;
   streetName: FormControl;
   blockNumber: FormControl;
   priestId: number;
@@ -40,6 +41,7 @@ export class BulkImportComponent implements OnInit {
   @ViewChild(DragAndDropComponent) dragAndDrop;
 
   importRequestFormControl: ImportRequestFormControl = {
+    prefix: new FormControl('', [Validators.required]),
     streetName: new FormControl('', [Validators.required]),
     blockNumber: new FormControl('', [Validators.required]),
     priestId: this.getCurrentLoggedPriestId()
@@ -56,7 +58,8 @@ export class BulkImportComponent implements OnInit {
       .pipe(
         startWith(''),
         map(value => this._filterStreetName(value)),
-        tap(() => this.updateBlockNumbers())
+        tap(() => this.updateBlockNumbers()),
+        tap(() => this.updatePrefix())
       );
     this.filteredOptions.blockNumber = this.importRequestFormControl.blockNumber.valueChanges
       .pipe(
@@ -115,6 +118,7 @@ export class BulkImportComponent implements OnInit {
   private prepareData(): FormData {
     const data: FormData = new FormData();
     data.append('file', this.importRequestFile);
+    data.append('prefix', this.importRequestFormControl.prefix.value);
     data.append('streetName', this.importRequestFormControl.streetName.value);
     data.append('blockNumber', this.importRequestFormControl.blockNumber.value);
     data.append('priestId', String(this.importRequestFormControl.priestId));
@@ -153,19 +157,26 @@ export class BulkImportComponent implements OnInit {
   }
 
   private resetAll(): void {
-    this.importRequestFormControl.streetName.setValue('');
-    this.importRequestFormControl.blockNumber.setValue('');
+    this.importRequestFormControl.prefix.reset();
+    this.importRequestFormControl.streetName.reset();
+    this.importRequestFormControl.blockNumber.reset();
     this.importRequestFormControl.priestId = this.getCurrentLoggedPriestId();
     this.importRequestFile = null;
     this.dragAndDrop.resetFile();
   }
 
   private _filterStreetName(value: string): string[] {
+    if(value == null) {
+      return this.streetNames;
+    }
     const filterValue = value.toLowerCase();
     return this.streetNames.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   private _filterBlockNumber(value: string): string[] {
+    if(value == null) {
+      return this.blockNumbers;
+    }
     const filterValue = value.toLowerCase();
     return this.blockNumbers.filter(option => option.toLowerCase().includes(filterValue));
   }
@@ -173,6 +184,15 @@ export class BulkImportComponent implements OnInit {
   updateBlockNumbers(): void {
     let streetName = this.importRequestFormControl.streetName.value;
     this.blockNumbers = this.addresses.filter(a => a.streetName == streetName).map(a => a.blockNumber);
+  }
+
+  updatePrefix(): void {
+    let streetName = this.importRequestFormControl.streetName.value;
+    let prefixes = this.addresses.filter(a => a.streetName == streetName).map(a => a.prefix);
+    if(prefixes.length > 0) {
+      let prefix = prefixes[0];
+      this.importRequestFormControl.prefix.setValue(prefix);
+    }
   }
 
   private isImportRequestValid(): boolean {

@@ -23,7 +23,8 @@ abstract class ZipExportService implements FileContentProvider {
         ByteArrayOutputStream content = new ByteArrayOutputStream();
         try(ZipOutputStream zip = new ZipOutputStream(content)) {
             for(SelectedAddress selectedAddress : selectedAddresses) {
-                String entryName = format("%s%s_%s.%s",
+                String entryName = format("%s%s%s_%s.%s",
+                        selectedAddress.getAddress().getPrefix(),
                         selectedAddress.getAddress().getStreetName(),
                         selectedAddress.getAddress().getBlockNumber(),
                         joinSeasonNames(selectedAddress.getSeasons()),

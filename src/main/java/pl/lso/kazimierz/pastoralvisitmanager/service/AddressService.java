@@ -14,14 +14,13 @@ import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentRepository;
 
 import javax.transaction.Transactional;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.trim;
-import static org.springframework.util.CollectionUtils.isEmpty;
-
 
 @Service
 public class AddressService {
@@ -57,7 +56,14 @@ public class AddressService {
         if(addressData == null) {
             throw new NotFoundException("Address data not found");
         }
+
+        String prefix = trim(addressData.getPrefix());
+        if(isEmpty(prefix)) {
+            prefix = null;
+        }
+
         Address address = new Address();
+        address.setPrefix(prefix);
         address.setStreetName(trim(addressData.getStreetName()));
         address.setBlockNumber(trim(addressData.getBlockNumber()));
 
@@ -77,6 +83,12 @@ public class AddressService {
             throw new BadRequestException("Such an address already exists");
         }
 
+        String prefix = trim(addressData.getPrefix());
+        if(isEmpty(prefix)) {
+            prefix = null;
+        }
+
+        address.get().setPrefix(prefix);
         address.get().setStreetName(trim(addressData.getStreetName()));
         address.get().setBlockNumber(trim(addressData.getBlockNumber()));
 

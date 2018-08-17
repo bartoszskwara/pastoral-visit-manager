@@ -19,6 +19,7 @@ public class AddressMapper {
     public static SimpleAddressDto mapSimple(Address address) {
         return SimpleAddressDto.builder()
                 .id(address.getId())
+                .prefix(address.getPrefix())
                 .streetName(address.getStreetName())
                 .blockNumber(address.getBlockNumber())
                 .apartmentCount(address.getApartments().size())
@@ -28,6 +29,7 @@ public class AddressMapper {
     public static AddressDto map(Address address) {
         return AddressDto.builder()
                 .id(address.getId())
+                .prefix(address.getPrefix())
                 .streetName(address.getStreetName())
                 .blockNumber(address.getBlockNumber())
                 .apartments(mapApartments(address.getApartments()))

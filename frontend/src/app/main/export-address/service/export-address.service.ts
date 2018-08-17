@@ -14,12 +14,6 @@ export class ExportAddressService {
 
   constructor(private http: HttpClient) { }
 
-  /*exportToCsv(): Observable<ExportResponse> {
-    return this.http.get<ExportResponse>(this.exportUrl)
-      .pipe(
-        catchError(this.handleError<ExportResponse>("exporting to csv", new ExportResponse()))
-      );
-  }*/
   exportToCsv(addressId: number): Observable<Blob> {
     return this.downloadFile(`${this.exportUrl}/address/${addressId}/format/csv`, this.getResponseTypeBlobOptions());
   }

@@ -9,7 +9,10 @@
     <mat-card-content>
       <div class="flex-center">
         <mat-form-field>
-          <input type="text" placeholder="Street name" aria-label="Street name" matInput [formControl]="importRequestFormControl.streetName" [matAutocomplete]="auto1">
+          <input type="text" placeholder="Prefix" aria-label="Prefix" matInput [formControl]="importRequestFormControl.prefix">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="text" placeholder="Street name" aria-label="Street name" matInput [formControl]="importRequestFormControl.streetName" [matAutocomplete]="auto1" required>
           <mat-autocomplete #auto1="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions.streetName | async" [value]="option">
               {{option}}
@@ -18,7 +21,7 @@
           <mat-error *ngIf="importRequestFormControl.streetName.invalid">{{getStreetNameErrorMessage()}}</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input type="text" placeholder="Block number" aria-label="Block number" matInput [formControl]="importRequestFormControl.blockNumber" [matAutocomplete]="auto2">
+          <input type="text" placeholder="Block number" aria-label="Block number" matInput [formControl]="importRequestFormControl.blockNumber" [matAutocomplete]="auto2" required>
           <mat-autocomplete #auto2="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions.blockNumber | async" [value]="option">
               {{option}}

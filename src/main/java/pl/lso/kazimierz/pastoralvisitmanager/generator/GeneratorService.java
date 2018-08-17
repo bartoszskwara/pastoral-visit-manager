@@ -136,7 +136,7 @@ public class GeneratorService {
             String[] items = line.split(";");
 
             String streetName = trim(items[8].concat(" ").concat(items[7]));
-            streetName = trim(items[6].concat(" ").concat(streetName));
+            String prefix = trim(items[6]);
 
             Set<Integer> usedBlocks = new HashSet<>();
             for(int j = 0; j < nextInt(1, 5); j++) {
@@ -148,6 +148,7 @@ public class GeneratorService {
                 usedBlocks.add(randomBlockNumber);
 
                 Address address = new Address();
+                address.setPrefix(prefix);
                 address.setStreetName(streetName);
                 address.setBlockNumber(String.valueOf(randomBlockNumber));
                 addressRepository.save(address);

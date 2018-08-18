@@ -1,41 +1,27 @@
-# Pastoral Visit Manager 2.5
+# Frontend
 
-Trello (TODO tasks): https://trello.com/b/RYXTHF8z/pastoral-visit-manager
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
-### 1. Requirements
-1. Java 8+
-2. Maven 3.5+
-3. Node 8.6.0+ https://nodejs.org/en/
-4. Npm 5.3.0+
-5. Angular Cli 1.6.1+
-6. PostgreSQL 10
+## Development server
 
-### 2. Preparation
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Maven: https://maven.apache.org/download.cgi
+## Code scaffolding
 
-Node and npm: https://nodejs.org/en/
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-Angular Cli:
-1. Open terminal anywhere
-2. Run: npm install -g @angular/cli
+## Build
 
-PostgreSQL Server:
-1. Download and install postgres server
-2. Go to Task Manager > Services > find postgres-x64-10 > Run (if not runnning)
-3. Create database called 'pastoraldb' and make sure there is an user called 'postgres' with password 'postgres' who has access to the database
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-### 3. Installation
-1. Clone the repository
-2. Import project into InteliJ IDEA (from existing sources > as Maven > next, next)
-3. Find PastoralVisitManagerApplication class and run it
-4. Backend server is running at localhost:8090
-5. Go to frontend folder
-6. Open terminal there
-7. Execute: 
-        
-        npm install 
-8. Than run: 
+## Running unit tests
 
-        ng serve --open
-9. Frontend is listening at localhost:4200 (--open option will open the browser after compilation)
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

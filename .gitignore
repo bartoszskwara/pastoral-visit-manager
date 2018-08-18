@@ -1,33 +1,39 @@
-target/
-frontend/node_modules/
-src/main/resources/*.csv
-src/main/resources/application.yaml
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Compiled class file
-*.class
+# compiled output
+/dist
+/tmp
+/out-tsc
 
-# Log file
-*.log
+# dependencies
+/node_modules
 
-# BlueJ files
-*.ctxt
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# System Files
+.DS_Store
+Thumbs.db

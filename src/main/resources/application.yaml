@@ -3,12 +3,12 @@ debug: true
 spring:
   jpa:
     hibernate:
-      ddlAuto: validate
+      ddlAuto: create-drop
     show-sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/pastoraldb
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://ec2-54-247-98-162.eu-west-1.compute.amazonaws.com:5432/d9um6en46i9e0f
+    username: rptonuljprzifs
+    password: d301f95d0375a003bf93298755918085ee1ae8ac91b8517d4875ebde6cf45a44
 
 server:
   port: 8090

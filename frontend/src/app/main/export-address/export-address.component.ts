@@ -18,16 +18,12 @@ export class ExportAddressComponent implements OnInit {
   exportToCsv(): void {
     this.exportService.exportToCsv(this.addressId)
       .subscribe(res => {
-        console.log('start download:');
-        console.log(res);
         let blob = new Blob([res], { type: 'text/csv' });
         let url= window.URL.createObjectURL(blob);
         window.open(url);
       }, error => {
-        console.log('download error:');
-        console.log(error);
+        console.log('download error', error);
       }, () => {
-        console.log('Completed file download.')
       });
   }
 

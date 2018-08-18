@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {SimpleAddress} from "../home/model/SimpleAddress";
-import {Filter} from "../home/home.component";
 import {AddressService} from "../address/service/address.service";
 import {ActivatedRoute, Router} from "@angular/router";
+
+export interface Filter {
+  name: string;
+}
 
 @Component({
   selector: 'addresses-list',
@@ -41,7 +44,6 @@ export class AddressesListComponent implements OnInit {
 
   private getAddresses(page: number, size: number, filter: Filter): void {
     this.loading = true;
-    console.log('fir', this.addresses);
     this.addressService.fetchAddresses(page, size, filter.name)
       .subscribe(
         response => {
@@ -50,14 +52,12 @@ export class AddressesListComponent implements OnInit {
           }
         },
         error => {
-          console.log('error');
-          console.log(error);
+          console.log('error', error);
           this.addresses = [];
           this.loading = false;
         },
         () => {
           this.loading = false;
-          console.log('addresses fetched');
         });
   }
 
@@ -73,13 +73,11 @@ export class AddressesListComponent implements OnInit {
           this.addresses = response.content;
         },
         error => {
-          console.log('error');
-          console.log(error);
+          console.log('error', error);
           this.loading = false;
         },
         () => {
           this.loading = false;
-          console.log('addresses fetched');
         });
   }
 

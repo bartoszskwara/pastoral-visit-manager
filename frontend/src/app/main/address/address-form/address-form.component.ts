@@ -138,15 +138,12 @@ export class AddressFormComponent implements OnInit {
     let apartmentNumbers: number[];
     apartmentNumbers = apartments.map(Number).sort((a,b) => a-b);
 
-    console.log(apartmentNumbers);
     let excluded = [];
     for(let i = 1; i < apartmentNumbers[0]; i++) {
-      console.log('pushing 1', i);
       excluded.push(i);
     }
     for(let i = apartmentNumbers[0]; i <= apartmentNumbers[apartmentNumbers.length - 1]; i++) {
       if(!apartmentNumbers.includes(i)) {
-        console.log('pushing 2', i);
         excluded.push(i);
       }
     }

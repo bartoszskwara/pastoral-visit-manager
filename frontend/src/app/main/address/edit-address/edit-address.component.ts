@@ -37,7 +37,7 @@ export class EditAddressComponent implements OnInit {
         },
         error => {
           this.loading.main = false;
-          console.log('error');
+          console.log('error', error);
         },
         () => {
           this.loading.main = false;
@@ -45,18 +45,15 @@ export class EditAddressComponent implements OnInit {
   }
 
   saveAddress(addressDto: AddressDto) {
-    console.log('saving ->', addressDto);
     this.editAddressService.save(this.address.id, addressDto)
       .subscribe(
         address => {
-          console.log(address);
           this.router.navigate(['../../', address.id], {relativeTo: this.route});
         },
         error => {
-          console.log(error);
+          console.log('error', error);
         },
         () => {
-          console.log('address saved');
         }
       );
   }

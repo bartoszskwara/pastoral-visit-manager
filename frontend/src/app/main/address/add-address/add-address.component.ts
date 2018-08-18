@@ -19,14 +19,12 @@ export class AddAddressComponent implements OnInit {
     this.addAddressService.save(newAddress)
       .subscribe(
         address => {
-          console.log(address);
           this.router.navigate(['../', address.id], {relativeTo: this.route});
         },
         error => {
-          console.log(error);
+          console.log('error', error);
         },
         () => {
-          console.log('address added');
         }
       );
 

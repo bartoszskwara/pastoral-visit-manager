@@ -5,15 +5,19 @@ import {Observable, of} from "rxjs/index";
 import {Address} from "../../shared/model/Address";
 import {catchError} from "rxjs/internal/operators";
 import {AddressDto} from "../../shared/model/AddressDto";
+import {BaseService} from "../../shared/message/base.service";
+import {MatSnackBar} from "@angular/material";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AddAddressService {
+export class AddAddressService extends BaseService {
 
   private addressUrl = `${environment.server.url}/address`;
 
-  constructor(private http: HttpClient) { }
+  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
+    super(snackBar)
+  }
 
   public save(address: AddressDto): Observable<Address> {
     return this.http.post<Address>(this.addressUrl, address, AddAddressService.getApplicationJsonHeaders())
@@ -27,14 +31,6 @@ export class AddAddressService {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
-    };
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log('ERROR');
-      console.error(error);
-      return of(result as T);
     };
   }
 }

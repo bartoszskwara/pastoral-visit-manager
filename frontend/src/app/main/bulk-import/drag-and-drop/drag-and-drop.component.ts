@@ -46,11 +46,9 @@ export class DragAndDropComponent implements OnInit {
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
-    console.log('dragging over', event);
   }
 
   private removeDragData(event: DragEvent) {
-    console.log('Removing drag data');
     if (event.dataTransfer.items) {
       event.dataTransfer.items.clear();
     } else {
@@ -64,8 +62,6 @@ export class DragAndDropComponent implements OnInit {
       if(this.isAcceptedFormat(file.name)) {
         this.emit(file);
         this.file = file;
-      } else {
-        console.log('format not accepted');
       }
     }
   }

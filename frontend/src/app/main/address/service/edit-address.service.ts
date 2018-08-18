@@ -2,22 +2,24 @@ import { Injectable } from '@angular/core';
 import {Address} from "../../shared/model/Address";
 import {catchError} from "rxjs/internal/operators";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {AddAddressService} from "./add-address.service";
 import {Observable, of} from "rxjs/index";
 import {environment} from "../../../../environments/environment";
 import {AddressDto} from "../../shared/model/AddressDto";
+import {BaseService} from "../../shared/message/base.service";
+import {MatSnackBar} from "@angular/material";
 
 @Injectable({
   providedIn: 'root'
 })
-export class EditAddressService {
+export class EditAddressService extends BaseService {
 
   private addressUrl = `${environment.server.url}/address`;
 
-  constructor(private http: HttpClient) { }
+  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
+    super(snackBar)
+  }
 
   fetchAddress(id: number): Observable<Address> {
-    console.log('id', id);
     return this.http.get<Address>(`${this.addressUrl}/${id}`)
       .pipe(
         catchError(this.handleError<Address>("get address details", new Address()))
@@ -36,14 +38,6 @@ export class EditAddressService {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
-    };
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log('ERROR');
-      console.error(error);
-      return of(result as T);
     };
   }
 }

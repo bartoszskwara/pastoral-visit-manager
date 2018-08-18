@@ -6,15 +6,19 @@ import {environment} from "../../../../environments/environment";
 import {Observable, of} from "rxjs/index";
 import {SimpleAddress} from "../../home/model/SimpleAddress";
 import {Page} from "../../shared/model/Page";
+import {BaseService} from "../../shared/message/base.service";
+import {MatSnackBar} from "@angular/material";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AddressService {
+export class AddressService extends BaseService {
 
   private addressUrl = `${environment.server.url}/address`;
 
-  constructor(private http: HttpClient) { }
+  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
+    super(snackBar);
+  }
 
   fetchAddresses(page: number, size: number, name: string) : Observable<Page<SimpleAddress>> {
     let params = new HttpParams()
@@ -32,13 +36,5 @@ export class AddressService {
       .pipe(
         catchError(this.handleError<SimpleAddress[]>("get addresses", []))
       );
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log('ERROR');
-      console.error(error);
-      return of(result as T);
-    };
   }
 }

@@ -83,7 +83,7 @@ export class AddressDetailsComponent implements OnInit {
           this.priests = priests;
         },
         error => {
-          console.log('error');
+          console.log('error', error);
         },
         () => {}
         );
@@ -94,7 +94,7 @@ export class AddressDetailsComponent implements OnInit {
           this.sortSeasonsByEndDate(this.seasons);
         },
         error => {
-          console.log(error);
+          console.log('error', error);
         },
         () => {
           this.createSeasonColumns();
@@ -119,7 +119,7 @@ export class AddressDetailsComponent implements OnInit {
         },
         error => {
           this.loading.main = false;
-          console.log('error');
+          console.log('error', error);
         },
         () => {
           this.loading.main = false;
@@ -138,7 +138,6 @@ export class AddressDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if(result == null) {
         return;
       }
@@ -157,14 +156,11 @@ export class AddressDetailsComponent implements OnInit {
       this.pastoralVisitService.savePastoralVisit(pastoralVisit, this.getApplicationJsonHeaders())
         .subscribe(
           pastoralVisit => {
-            console.log('saved');
-            console.log(pastoralVisit);
           },
           error => {
-            console.log(error);
+            console.log('error', error);
           },
           () => {
-            console.log('saving completed');
             this.getAddress(this.address.id);
             this.menu.apartments.open = true;
           });
@@ -249,14 +245,11 @@ export class AddressDetailsComponent implements OnInit {
     this.pastoralVisitService.savePastoralVisit(pastoralVisit, this.getApplicationJsonHeaders())
       .subscribe(
         pastoralVisit => {
-          console.log('saved');
-          console.log(pastoralVisit);
         },
         error => {
-          console.log(error);
+          console.log('error', error);
         },
         () => {
-          console.log('saving completed');
           this.getAddress(this.address.id);
           this.menu.apartments.open = true;
         });

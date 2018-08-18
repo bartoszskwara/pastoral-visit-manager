@@ -4,28 +4,24 @@ import {Observable, of} from "rxjs/index";
 import {Address} from "../../shared/model/Address";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
+import {BaseService} from "../../shared/message/base.service";
+import {MatSnackBar} from "@angular/material";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AddressDetailsService {
+export class AddressDetailsService extends BaseService {
 
   private addressUrl = `${environment.server.url}/address`;
 
-  constructor(private http: HttpClient) { }
+  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
+    super(snackBar)
+  }
 
   fetchAddress(id: number): Observable<Address> {
     return this.http.get<Address>(`${this.addressUrl}/${id}`)
       .pipe(
         catchError(this.handleError<Address>("get address details", new Address()))
       );
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log('ERROR');
-      console.error(error);
-      return of(result as T);
-    };
   }
 }

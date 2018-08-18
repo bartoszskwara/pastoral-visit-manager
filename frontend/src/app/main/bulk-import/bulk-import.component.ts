@@ -71,25 +71,20 @@ export class BulkImportComponent implements OnInit {
 
   send(): void {
     if(!this.isImportRequestValid()) {
-      console.log('error', 'messageService');
       return;
     }
     let data = this.prepareData();
-    console.log('data', data);
     this.loading = true;
     this.importService.bulkImport(data)
       .subscribe(
         response => {
-          console.log(response);
         },
         error => {
           this.loading = false;
-          console.log('error');
-          console.log(error);
+          console.log('error', error);
         },
         () => {
           this.loading = false;
-          console.log('imported');
           this.resetAll();
         });
   }
@@ -101,12 +96,10 @@ export class BulkImportComponent implements OnInit {
           this.addresses = response;
         },
         error => {
-          console.log('error');
-          console.log(error);
+          console.log('error', error);
         },
         () => {
           this.streetNames = this.getStreetNames();
-          console.log('street names fetched');
         });
   }
 
@@ -135,7 +128,7 @@ export class BulkImportComponent implements OnInit {
           this.priests = priests;
         },
         error => {
-          console.log('error');
+          console.log('error', error);
         },
         () => {}
       );

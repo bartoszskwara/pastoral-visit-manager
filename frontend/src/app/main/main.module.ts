@@ -106,7 +106,7 @@ import { AddressesListComponent } from './addresses-list/addresses-list.componen
     BulkExportComponent,
     BulkImportComponent,
     DragAndDropComponent,
-    AddressesListComponent
+    AddressesListComponent,
   ],
   entryComponents: [PastoralVisitDialog],
   providers: [AddressDetailsService,
@@ -117,7 +117,7 @@ import { AddressesListComponent } from './addresses-list/addresses-list.componen
     AddressService,
     AddAddressService,
     EditAddressService,
-    ImportService
+    ImportService,
   ]
 })
 export class MainModule { }

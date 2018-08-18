@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Filter} from "../../home/home.component";
 import {AddressService} from "../../address/service/address.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {SimpleAddress} from "../../home/model/SimpleAddress";
@@ -69,14 +68,12 @@ export class BulkExportComponent implements OnInit {
           }
         },
         error => {
-          console.log('error');
-          console.log(error);
+          console.log('error', error);
           this.addresses = [];
           this.loading = false;
         },
         () => {
           this.loading = false;
-          console.log('addresses fetched');
           this.updateAllSelection();
         });
   }
@@ -88,10 +85,9 @@ export class BulkExportComponent implements OnInit {
           this.seasons = seasons;
         },
         error => {
-          console.log(error);
+          console.log('error', error);
         },
         () => {
-          console.log('fetched', this.seasons);
         }
       );
   }
@@ -104,45 +100,35 @@ export class BulkExportComponent implements OnInit {
           this.addresses = response.content;
         },
         error => {
-          console.log('error');
-          console.log(error);
+          console.log('error', error);
           this.loading = false;
         },
         () => {
           this.loading = false;
-          console.log('addresses fetched');
         });
   }
 
   exportCsv(): void {
     this.exportService.exportBulkCsv(this.prepareSelectedAddresses())
       .subscribe(res => {
-        console.log('start download:');
-        console.log(res);
         let blob = new Blob([res], { type: 'application/zip' });
         let url= window.URL.createObjectURL(blob);
         window.open(url);
       }, error => {
-        console.log('download error:');
-        console.log(error);
+        console.log('download error:', error);
       }, () => {
-        console.log('Completed file download.')
       });
   }
 
   exportPdf(): void {
     this.exportService.exportBulkPdf(this.prepareSelectedAddresses())
       .subscribe(res => {
-        console.log('start download:');
-        console.log(res);
         let blob = new Blob([res], { type: 'application/zip' });
         let url= window.URL.createObjectURL(blob);
         window.open(url);
       }, error => {
-        console.log('download error:');
-        console.log(error);
+        console.log('download error:', error);
       }, () => {
-        console.log('Completed file download.')
       });
   }
 

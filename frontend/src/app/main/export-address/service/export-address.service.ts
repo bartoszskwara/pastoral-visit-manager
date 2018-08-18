@@ -1,49 +1,51 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../../environments/environment";
-import {catchError} from "rxjs/internal/operators";
 import {Observable, of} from "rxjs/index";
 import {HttpClient} from "@angular/common/http";
 import {SelectedAddressDto} from "../model/SelectedAddressDto";
+import {BaseService} from "../../shared/message/base.service";
+import {MatSnackBar} from "@angular/material";
+import {catchError} from "rxjs/internal/operators";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ExportAddressService {
+export class ExportAddressService extends BaseService {
 
   private exportUrl = `${environment.server.url}` + "/export";
 
-  constructor(private http: HttpClient) { }
+  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
+    super(snackBar);
+  }
 
   exportToCsv(addressId: number): Observable<Blob> {
     return this.downloadFile(`${this.exportUrl}/address/${addressId}/format/csv`, this.getResponseTypeBlobOptions());
   }
 
   exportBulkCsv(data: SelectedAddressDto[]) {
-    console.log('export', data);
-    return this.http.post(`${this.exportUrl}/address/bulk/format/csv`, data, this.getResponseTypeBlobOptions());
+    return this.http.post(`${this.exportUrl}/address/bulk/format/csv`, data, this.getResponseTypeBlobOptions())
+      .pipe(
+        catchError(this.handleError<Blob>("export addresses", new Blob()))
+      );
   }
 
   exportBulkPdf(data: SelectedAddressDto[]) {
-    console.log('export', data);
-    return this.http.post(`${this.exportUrl}/address/bulk/format/pdf`, data, this.getResponseTypeBlobOptions());
+    return this.http.post(`${this.exportUrl}/address/bulk/format/pdf`, data, this.getResponseTypeBlobOptions())
+      .pipe(
+        catchError(this.handleError<Blob>("export addresses", new Blob()))
+      );
   }
 
   downloadFile(url: string, options: object): Observable<Blob> {
-    return this.http.get<Blob>(url, options);
+    return this.http.get<Blob>(url, options)
+      .pipe(
+        catchError(this.handleError<Blob>("export addresses", new Blob()))
+      );
   }
 
   private getResponseTypeBlobOptions(): object {
     return {
       responseType: 'blob'
-    };
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log('ERROR');
-      console.error(error);
-
-      return of(result as T);
     };
   }
 }

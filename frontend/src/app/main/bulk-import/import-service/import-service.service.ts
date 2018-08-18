@@ -5,30 +5,24 @@ import {catchError} from "rxjs/internal/operators";
 import {environment} from "../../../../environments/environment";
 import {Observable, of} from "rxjs/index";
 import {Page} from "../../shared/model/Page";
+import {BaseService} from "../../shared/message/base.service";
+import {MatSnackBar} from "@angular/material";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ImportService {
+export class ImportService extends BaseService {
 
   private addressUrl = `${environment.server.url}/import/address`;
 
-  constructor(private http: HttpClient) { }
+  constructor(public snackBar: MatSnackBar, private http: HttpClient) {
+    super(snackBar);
+  }
 
   bulkImport(data: object) : Observable<String> {
-    console.log(data);
-
     return this.http.post<String>(this.addressUrl, data)
       .pipe(
         catchError(this.handleError<String>("import addresses", ""))
       );
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log('ERROR');
-      console.error(error);
-      return of(result as T);
-    };
   }
 }

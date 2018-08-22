@@ -1,7 +1,5 @@
 target/
-frontend/node_modules/
 src/main/resources/*.csv
-src/main/resources/application.yaml
 
 # Compiled class file
 *.class

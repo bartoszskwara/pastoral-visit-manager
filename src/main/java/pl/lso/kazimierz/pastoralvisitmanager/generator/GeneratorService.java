@@ -123,7 +123,7 @@ public class GeneratorService {
 
 
         Set<Integer> usedNumbers = new HashSet<>();
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 3; i++) {
             System.out.println("\n>>>>>>>> " + i + "\n");
             Integer randomNumber;
             do {
@@ -152,7 +152,7 @@ public class GeneratorService {
                 address.setStreetName(streetName);
                 address.setBlockNumber(String.valueOf(randomBlockNumber));
                 addressRepository.save(address);
-                address.setApartments(generateApartments(address, nextInt(1, 31)));
+                address.setApartments(generateApartments(address, nextInt(1, 4)));
             }
 
         }

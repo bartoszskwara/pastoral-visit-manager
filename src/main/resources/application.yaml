@@ -3,7 +3,7 @@ debug: true
 spring:
   jpa:
     hibernate:
-      ddlAuto: validate
+      ddlAuto: create-drop
     show-sql: true
   datasource:
     driverClassName: org.postgresql.Driver

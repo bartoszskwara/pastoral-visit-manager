@@ -9,8 +9,10 @@ Trello (TODO tasks): https://trello.com/b/RYXTHF8z/pastoral-visit-manager
 
 ### 2. Installation
 1. Clone the repository
-2. Import project into InteliJ IDEA (from existing sources > as Maven > next, next)
-3. Find PastoralVisitManagerApplication class and run it
+2. Run in main directory:
+
+    `mvn spring-boot:run`
+
 4. Backend server is running at localhost:8090
 
 ### 3. Useful hints

@@ -1,5 +1,6 @@
 package pl.lso.kazimierz.pastoralvisitmanager.generator;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,10 @@ import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.PastoralVisit;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Priest;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Season;
+import pl.lso.kazimierz.pastoralvisitmanager.model.generator.InitialConfigurationDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.mapper.SeasonMapper;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
+import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentHistoryRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.PastoralVisitRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.PriestRepository;
@@ -22,95 +26,98 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.apache.commons.lang3.StringUtils.trim;
-import static org.apache.commons.lang3.time.DateUtils.parseDate;
 
 @Service
 public class GeneratorService {
 
-    private final AddressRepository addressRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
-    private final ApartmentRepository apartmentRepository;
+    @Autowired
+    private ApartmentRepository apartmentRepository;
 
-    private final PastoralVisitRepository pastoralVisitRepository;
+    @Autowired
+    private PastoralVisitRepository pastoralVisitRepository;
 
-    private final PriestRepository priestRepository;
+    @Autowired
+    private PriestRepository priestRepository;
 
-    private final SeasonRepository seasonRepository;
+    @Autowired
+    private SeasonRepository seasonRepository;
+
+    @Autowired
+    private ApartmentHistoryRepository apartmentHistoryRepository;
 
     private List<Priest> priests;
     private List<Season> seasons;
 
-    @Autowired
-    public GeneratorService(AddressRepository addressRepository, ApartmentRepository apartmentRepository, PastoralVisitRepository pastoralVisitRepository, PriestRepository priestRepository, SeasonRepository seasonRepository) {
-        this.addressRepository = addressRepository;
-        this.apartmentRepository = apartmentRepository;
-        this.pastoralVisitRepository = pastoralVisitRepository;
-        this.priestRepository = priestRepository;
-        this.seasonRepository = seasonRepository;
-    }
-
     private void prepare() throws ParseException {
-        createPriests();
+        createPriests(asList("Adam", "Jozef"));
         createSeasons();
     }
 
-    private void createPriests() {
-        Priest p1 = new Priest();
-        p1.setName("Wiesław Kiebuła");
-        Priest p2 = new Priest();
-        p2.setName("Józef Jończyk");
-        Priest p3 = new Priest();
-        p3.setName("Paweł Mielecki");
-        Priest p4 = new Priest();
-        p4.setName("Mirosław Czapla");
-        Priest p5 = new Priest();
-        p5.setName("Krzysztof Król");
-
-        priestRepository.save(p1);
-        priestRepository.save(p2);
-        priestRepository.save(p3);
-        priestRepository.save(p4);
-        priestRepository.save(p5);
+    public void createPriests(List<String> names) {
+        if(CollectionUtils.isEmpty(names)) {
+            return;
+        }
         priests = new ArrayList<>();
-        priests.addAll(asList(p1, p2, p3, p4, p5));
+        for(String name : names) {
+            Priest p = new Priest();
+            p.setName(name);
+            priests.add(p);
+            priestRepository.save(p);
+        }
     }
 
-    private void createSeasons() throws ParseException {
-        Season s1 = new Season();
-        s1.setStartDate(DateUtils.parseDate("2014-12-01", "yyyy-MM-dd"));
-        s1.setEndDate(DateUtils.parseDate("2015-02-01", "yyyy-MM-dd"));
-        s1.setName("2014");
-        Season s2 = new Season();
-        s2.setStartDate(DateUtils.parseDate("2015-12-01", "yyyy-MM-dd"));
-        s2.setEndDate(DateUtils.parseDate("2016-02-01", "yyyy-MM-dd"));
-        s2.setName("2015");
-        Season s3 = new Season();
-        s3.setStartDate(DateUtils.parseDate("2016-12-01", "yyyy-MM-dd"));
-        s3.setEndDate(DateUtils.parseDate("2017-02-01", "yyyy-MM-dd"));
-        s3.setName("2016");
-        Season s4 = new Season();
-        s4.setStartDate(DateUtils.parseDate("2017-12-01", "yyyy-MM-dd"));
-        s4.setEndDate(DateUtils.parseDate("2018-02-01", "yyyy-MM-dd"));
-        s4.setName("2017");
-        s4.setCurrent(true);
-        seasonRepository.save(s1);
-        seasonRepository.save(s2);
-        seasonRepository.save(s3);
-        seasonRepository.save(s4);
+    public void createSeasons() throws ParseException {
+        Season s1 = Season.builder()
+                .startDate(DateUtils.parseDate("2014-12-01", "yyyy-MM-dd"))
+                .endDate(DateUtils.parseDate("2015-02-01", "yyyy-MM-dd"))
+                .name("2014")
+                .build();
+        Season s2 = Season.builder()
+                .startDate(DateUtils.parseDate("2015-12-01", "yyyy-MM-dd"))
+                .endDate(DateUtils.parseDate("2016-02-01", "yyyy-MM-dd"))
+                .name("2015")
+                .build();
+        Season s3 = Season.builder()
+                .startDate(DateUtils.parseDate("2016-12-01", "yyyy-MM-dd"))
+                .endDate(DateUtils.parseDate("2017-02-01", "yyyy-MM-dd"))
+                .name("2016")
+                .build();
+        Season s4 = Season.builder()
+                .startDate(DateUtils.parseDate("2017-12-01", "yyyy-MM-dd"))
+                .endDate(DateUtils.parseDate("2018-02-01", "yyyy-MM-dd"))
+                .name("2017")
+                .build();
+        Season s5 = Season.builder()
+                .startDate(DateUtils.parseDate("2018-12-01", "yyyy-MM-dd"))
+                .endDate(DateUtils.parseDate("2019-02-01", "yyyy-MM-dd"))
+                .name("2018")
+                .current(true)
+                .build();
+        saveSeasons(asList(s1, s2, s3, s4, s5));
+    }
+
+    private void saveSeasons(List<Season> seasonsToSave) {
+        if(CollectionUtils.isEmpty(seasonsToSave)) {
+            return;
+        }
+        for(Season s : seasonsToSave) {
+            seasonRepository.save(s);
+        }
         seasons = new ArrayList<>();
-        seasons.addAll(asList(s1, s2, s3, s4));
+        seasons.addAll(seasonsToSave);
     }
 
-    public void generate() throws URISyntaxException, IOException, ParseException {
+    void generate() throws URISyntaxException, IOException, ParseException {
         System.out.println("GENERATING....");
 
         prepare();

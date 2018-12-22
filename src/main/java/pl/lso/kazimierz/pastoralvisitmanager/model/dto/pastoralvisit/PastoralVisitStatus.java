@@ -3,7 +3,7 @@ package pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit;
 import org.apache.commons.lang3.StringUtils;
 
 public enum PastoralVisitStatus {
-    completed("+"), refused("-"), absent("?"), individually("ind."), not_requested("x");
+    completed("+"), refused("-"), absent("?"), individually("ind"), not_requested("x");
 
     private String description;
     private String status;

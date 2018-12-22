@@ -10,4 +10,7 @@ import java.util.List;
 public interface ApartmentRepository extends CrudRepository<Apartment, Long> {
     @Query("SELECT a FROM Apartment a WHERE a.address.id = :addressId")
     List<Apartment> findByAddressId(@Param("addressId") Long addressId);
+
+    @Query("SELECT a FROM Apartment a WHERE a.address.id = :addressId and a.number = :number")
+    Apartment findByAddressIdAndNumber(@Param("addressId") Long addressId, @Param("number") String number);
 }

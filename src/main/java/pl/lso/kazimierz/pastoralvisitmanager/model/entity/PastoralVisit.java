@@ -25,7 +25,7 @@ public class PastoralVisit {
     @Column(nullable = false, name = "id")
     private Long id;
 
-    @Column(nullable = false, name = "value")
+    @Column(name = "value")
     private String value;
 
     @Column(name = "date")

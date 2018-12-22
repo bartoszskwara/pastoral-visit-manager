@@ -25,6 +25,6 @@ public class SeasonController {
     @GetMapping({"", "/"})
     public ResponseEntity getSeasons() {
         List<Season> seasons = seasonService.getSeasons();
-        return ResponseEntity.ok(SeasonMapper.map(seasons));
+        return ResponseEntity.ok(SeasonMapper.mapSeasonDtos(seasons));
     }
 }

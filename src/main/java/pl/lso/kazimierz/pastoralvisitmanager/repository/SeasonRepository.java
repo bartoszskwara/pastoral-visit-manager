@@ -11,4 +11,7 @@ public interface SeasonRepository extends JpaRepository<Season, Long> {
 
     @Query("SELECT s FROM Season s WHERE s.name IN :names")
     List<Season> findAllByName(@Param("names") List<String> names);
+
+    @Query("SELECT s FROM Season s WHERE s.name = :name")
+    Season findByName(@Param("name") String name);
 }

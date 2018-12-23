@@ -21,6 +21,16 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             "order by a.prefix, a.streetName, a.blockNumber")
     Page<Address> findByNameAsPage(Pageable pageable, @Param("name") String name);
 
+
+    @Query(value = "select * from Address a " +
+            "where lower(concat(a.prefix, ' ', a.street_name, ' ', a.block_number)) like concat('%',lower(:name),'%') " +
+            "order by a.prefix, a.street_name, " +
+            "cast(regexp_replace(block_number, '[a-zA-Z]+', '') as int), " +
+            "regexp_replace(lower(block_number), '[0-9]+', '') " +
+            "limit :limit " +
+            "offset :offset", nativeQuery = true)
+    List<Address> findChunkByNameContaining(@Param("name") String name, @Param("limit") long limit, @Param("offset") long offset);
+
     @Query("select a from Address a where lower(a.streetName) like concat('%',lower(:streetNames),'%')")
     List<Address> findAllByStreetNameContainingIgnoreCase(@Param("streetNames") String streetNames);
 }

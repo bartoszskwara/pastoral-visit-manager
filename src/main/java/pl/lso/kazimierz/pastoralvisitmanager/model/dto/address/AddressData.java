@@ -1,6 +1,5 @@
 package pl.lso.kazimierz.pastoralvisitmanager.model.dto.address;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

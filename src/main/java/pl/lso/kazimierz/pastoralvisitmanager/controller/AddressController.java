@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressChunkDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.AddressData;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SimpleAddressDto;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
@@ -44,9 +45,10 @@ public class AddressController {
     }
 
     @GetMapping("/chunk")
-    public ResponseEntity getChunk(@PageableDefault(sort = {"streetName", "blockNumber"}, direction = Sort.Direction.ASC, value = 5) Pageable pageable, @RequestParam("name") String name) {
-        Page<SimpleAddressDto> addressDtos = addressService.getChunk(pageable, name).map(AddressMapper::mapSimple);
-        return ResponseEntity.ok(addressDtos);
+    public ResponseEntity getChunk(@RequestParam("name") String name, @RequestParam("limit") int limit, @RequestParam("offset") int offset) {
+        List<SimpleAddressDto> addressDtos = addressService.getChunk(name, limit, offset).stream().map(AddressMapper::mapSimple).collect(toList());
+        long count = addressService.getAllAddressesCount();
+        return ResponseEntity.ok(new AddressChunkDto(count, addressDtos));
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,6 @@
 package pl.lso.kazimierz.pastoralvisitmanager.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +15,12 @@ import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.ApartmentRepository;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.trim;
@@ -38,8 +41,13 @@ public class AddressService {
         return addressRepository.findAll();
     }
 
-    public Page<Address> getChunk(Pageable pageable, String name) {
-        return addressRepository.findByNameAsPage(pageable, name);
+    public List<Address> getChunk(String name, int limit, int offset) {
+        List<Address> addresses = addressRepository.findChunkByNameContaining(name, limit, offset);
+        return addresses != null ? addresses : emptyList();
+    }
+
+    public long getAllAddressesCount() {
+        return addressRepository.count();
     }
 
     public Address getAddress(Long addressId) {

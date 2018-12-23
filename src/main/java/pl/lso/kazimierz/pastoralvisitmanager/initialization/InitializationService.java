@@ -1,5 +1,6 @@
 package pl.lso.kazimierz.pastoralvisitmanager.initialization;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.generator.GeneratorService;
@@ -29,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 @Service
 public class InitializationService {
@@ -58,6 +60,23 @@ public class InitializationService {
         cleanDatabase();
         feedBasicData();
         feedDataFromFile("koleda.csv");
+    }
+
+    void fixStreetNameTemporary() {
+        List<Address> addresses = addressRepository.findAllByStreetNameContainingIgnoreCase("aleja");
+        List<Address> addressesAl = addressRepository.findAllByStreetNameContainingIgnoreCase("al.");
+        if(addresses == null) {
+            addresses = new ArrayList<>();
+        }
+        if(addressesAl == null) {
+            addressesAl = new ArrayList<>();
+        }
+        CollectionUtils.addAll(addresses, addressesAl);
+        addresses.forEach(a -> {
+            a.setPrefix("al.");
+            a.setStreetName(trim(a.getStreetName().replaceAll("[Aa]l\\.|[Aa]leja", "")));
+            addressRepository.save(a);
+        });
     }
 
     private void cleanDatabase() {
@@ -103,7 +122,6 @@ public class InitializationService {
             createPastoralVisit("2015", apartment, unknownPriest, status2015);
             createPastoralVisit("2016", apartment, unknownPriest, status2016);
             createPastoralVisit("2017", apartment, unknownPriest, status2017);
-
         });
     }
 
@@ -144,7 +162,6 @@ public class InitializationService {
         List<String> list = new ArrayList<>();
         Files.lines(path).forEach(line -> list.add(line.trim().replaceAll("\"", "")));
         list.remove(0);
-
         return list;
     }
 

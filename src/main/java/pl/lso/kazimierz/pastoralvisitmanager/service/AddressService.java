@@ -39,7 +39,7 @@ public class AddressService {
     }
 
     public Page<Address> getChunk(Pageable pageable, String name) {
-        return addressRepository.findAllByName(pageable, name);
+        return addressRepository.findByNameAsPage(pageable, name);
     }
 
     public Address getAddress(Long addressId) {

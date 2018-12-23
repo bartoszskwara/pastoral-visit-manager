@@ -15,11 +15,12 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.replaceAll;
 import static org.apache.commons.lang3.StringUtils.trim;
 
-abstract class ZipExportService implements FileContentProvider {
+abstract class ZipExportService extends BaseExportService {
 
     private static final String SEASON_NAME_DELIMITER = "+";
 
     byte[] createZipFile(List<SelectedAddress> selectedAddresses, ExportFileFormat fileFormat) {
+        validateSelectedAddresses(selectedAddresses);
         ByteArrayOutputStream content = new ByteArrayOutputStream();
         try(ZipOutputStream zip = new ZipOutputStream(content)) {
             for(SelectedAddress selectedAddress : selectedAddresses) {

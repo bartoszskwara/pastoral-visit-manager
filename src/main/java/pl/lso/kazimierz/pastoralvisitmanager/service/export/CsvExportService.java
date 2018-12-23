@@ -24,13 +24,13 @@ public class CsvExportService extends ZipExportService {
 
     @Override
     public byte[] createFileContent(SelectedAddress selectedAddress) {
+        List<Apartment> apartments = sortApartments(selectedAddress.getAddress().getApartments());
+
         StringJoiner lineJoiner = new StringJoiner(END_LINE);
         lineJoiner.add(createFileHeader(selectedAddress.getSeasons(), selectedAddress.getEmptyColumnsCount()));
-        int count = 1;
-        for(Apartment apartment : selectedAddress.getAddress().getApartments()) {
+        for(Apartment apartment : apartments) {
             StringJoiner joiner = new StringJoiner(DELIMITER);
-            joiner.add(String.valueOf(count))
-                    .add(apartment.getNumber());
+            joiner.add(apartment.getNumber());
             for(Season season : selectedAddress.getSeasons()) {
                 PastoralVisitStatus status = getPastoralVisitStatus(apartment, season);
                 joiner.add(status != null ? status.getStatus() : "");
@@ -39,14 +39,13 @@ public class CsvExportService extends ZipExportService {
                 joiner.add(DELIMITER);
             }
             lineJoiner.add(joiner.toString());
-            count++;
         }
         return lineJoiner.toString().getBytes();
     }
 
     private String createFileHeader(List<Season> seasons, Integer emptyColumnsCount) {
         StringJoiner joiner = new StringJoiner(DELIMITER);
-        joiner.add("").add("Apartment");
+        joiner.add("Apartment");
         for(Season season : seasons) {
             joiner.add(season.getName());
         }

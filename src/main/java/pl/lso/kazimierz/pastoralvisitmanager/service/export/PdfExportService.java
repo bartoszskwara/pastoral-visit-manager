@@ -9,7 +9,6 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SelectedAddress;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus;
@@ -67,7 +66,7 @@ public class PdfExportService extends ZipExportService {
     private Integer getColumnsCount(SelectedAddress selectedAddress) {
         int count = isNotEmpty(selectedAddress.getSeasons()) ? selectedAddress.getSeasons().size() : 0;
         count += selectedAddress.getEmptyColumnsCount() != null ? selectedAddress.getEmptyColumnsCount() : 0;
-        count += 2;
+        count += 1;
         return count;
     }
 
@@ -79,7 +78,6 @@ public class PdfExportService extends ZipExportService {
 
     private void createHeader(PdfPTable table, List<Season> seasons, Integer emptyColumnsCount) {
         List<String> columns = new ArrayList<>();
-        columns.add("");
         columns.add("No.");
         for (Season season : seasons) {
             columns.add(season.getName());
@@ -94,23 +92,9 @@ public class PdfExportService extends ZipExportService {
     }
 
     private void createRows(PdfPTable table, SelectedAddress selectedAddress) {
-        int count = 1;
-
-        List<Apartment> apartments = selectedAddress.getAddress().getApartments();
-        apartments.sort((o1, o2) -> {
-            Integer num1;
-            Integer num2;
-            try {
-                num1 = Integer.parseInt(o1.getNumber().replaceAll("[\\D]", ""));
-                num2 = Integer.parseInt(o2.getNumber().replaceAll("[\\D]", ""));
-            } catch (Exception e) {
-                return StringUtils.compare(o1.getNumber(), o2.getNumber());
-            }
-            return num1.compareTo(num2);
-        });
+        List<Apartment> apartments = sortApartments(selectedAddress.getAddress().getApartments());
 
         for(Apartment apartment : apartments) {
-            table.addCell(cell(String.valueOf(count)));
             table.addCell(cell(apartment.getNumber()));
 
             for(Season season : selectedAddress.getSeasons()) {
@@ -120,7 +104,6 @@ public class PdfExportService extends ZipExportService {
             for(int i = 0; i < selectedAddress.getEmptyColumnsCount(); i++) {
                 table.addCell(emptyCell());
             }
-            count++;
         }
     }
 

@@ -14,7 +14,13 @@ import pl.lso.kazimierz.pastoralvisitmanager.repository.PastoralVisitRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.PriestRepository;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.SeasonRepository;
 
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.Arrays.asList;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus.completed;
+import static pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus.individually;
 
 
 @Service
@@ -67,6 +73,15 @@ public class PastoralVisitService {
         newPastoralVisit.setPriest(priest.get());
         newPastoralVisit.setSeason(season.get());
         return pastoralVisitRepository.save(newPastoralVisit);
+    }
+
+    public long countCompletedPastoralVisitsInLastSeason(Long addressId) {
+        List<Season> notCurrentSeasons = seasonRepository.findNotCurrentOrderedByEndDate();
+        if(isEmpty(notCurrentSeasons)) {
+            return 0;
+        }
+        Long lastSeasonId = notCurrentSeasons.get(0).getId();
+        return pastoralVisitRepository.countPastoralVisitByAddressAndSeasonAndValue(addressId, lastSeasonId, asList(completed.getStatus(), individually.getStatus()));
     }
 
     private String mapStatus(String value) {

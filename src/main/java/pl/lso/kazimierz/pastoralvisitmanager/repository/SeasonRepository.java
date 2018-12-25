@@ -14,4 +14,9 @@ public interface SeasonRepository extends JpaRepository<Season, Long> {
 
     @Query("SELECT s FROM Season s WHERE s.name = :name")
     Season findByName(@Param("name") String name);
+
+    @Query("select s from Season s " +
+            "where s.current <> true " +
+            "order by s.endDate desc")
+    List<Season> findNotCurrentOrderedByEndDate();
 }

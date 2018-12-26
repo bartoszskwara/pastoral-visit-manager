@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SelectedAddress;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.common.EmptyColumn;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Apartment;
@@ -32,6 +33,7 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.springframework.data.domain.Sort.Direction.DESC;
+import static org.springframework.util.StringUtils.isEmpty;
 import static pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus.completed;
 import static pl.lso.kazimierz.pastoralvisitmanager.model.dto.pastoralvisit.PastoralVisitStatus.individually;
 import static pl.lso.kazimierz.pastoralvisitmanager.service.export.ExportFileFormat.PDF;
@@ -94,17 +96,47 @@ public class PdfExportService extends ZipExportService {
 
     private PdfPTable createTableForAddress(SelectedAddress selectedAddress) {
         PdfPTable table = new PdfPTable(getColumnsCount(selectedAddress));
+        try {
+            table.setWidths(calculateRelativeColumnWidths(selectedAddress));
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        table.setWidthPercentage(100);
         table.setHorizontalAlignment(Element.ALIGN_LEFT);
-        createHeader(table, selectedAddress.getSeasons(), selectedAddress.getEmptyColumnsCount());
+        createHeader(table, selectedAddress.getSeasons(), selectedAddress.getEmptyColumns());
         createRows(table, selectedAddress);
         return table;
     }
 
     private Integer getColumnsCount(SelectedAddress selectedAddress) {
         int count = isNotEmpty(selectedAddress.getSeasons()) ? selectedAddress.getSeasons().size() : 0;
-        count += selectedAddress.getEmptyColumnsCount() != null ? selectedAddress.getEmptyColumnsCount() : 0;
+        count += isNotEmpty(selectedAddress.getEmptyColumns()) ? selectedAddress.getEmptyColumns().size() : 0;
         count += 1;
         return count;
+    }
+
+    private float[] calculateRelativeColumnWidths(SelectedAddress selectedAddress) {
+        if(selectedAddress == null) {
+            return new float[]{};
+        }
+        List<Float> widths = new ArrayList<>();
+        widths.add(4f);
+        selectedAddress.getSeasons().forEach(s -> widths.add(s.getName().length() + 0f));
+        selectedAddress.getEmptyColumns().forEach(c -> {
+            float w = isEmpty(c.getName()) ? 3f : c.getName().length() + 0f;
+            if(w > 6f) {
+                w = 6f;
+            }
+            if(w < 3f) {
+                w = 3f;
+            }
+            widths.add(w);
+        });
+        float[] result = new float[widths.size()];
+        for(int i = 0; i < widths.size(); i++) {
+            result[i] = widths.get(i);
+        }
+        return result;
     }
 
     private String createStreetName(Address address) {
@@ -128,7 +160,7 @@ public class PdfExportService extends ZipExportService {
     }
 
     private LinkedHashMap<String, Long> createSummaryContent(Address address) {
-        List<Season> seasons = seasonRepository.findAll(new Sort(DESC, "name"));
+        List<Season> seasons = seasonRepository.findNotCurrentOrderedByEndDate();
         LinkedHashMap<String, Long> summary = new LinkedHashMap<>();
         seasons.forEach(s -> {
             long count = pastoralVisitRepository.countPastoralVisitByAddressAndSeasonAndValue(address.getId(), s.getId(), asList(completed.getStatus(), individually.getStatus()));
@@ -137,19 +169,14 @@ public class PdfExportService extends ZipExportService {
         return summary;
     }
 
-    private void createHeader(PdfPTable table, List<Season> seasons, Integer emptyColumnsCount) {
-        List<String> columns = new ArrayList<>();
-        columns.add("No.");
-        for (Season season : seasons) {
-            columns.add(season.getName());
+    private void createHeader(PdfPTable table, List<Season> seasons, List<EmptyColumn> emptyColumns) {
+        table.addCell(cell("No."));
+        if(isNotEmpty(seasons)) {
+            seasons.forEach(s -> table.addCell(cell((s.getName()))));
         }
-        for(int i = 0; i < emptyColumnsCount; i++) {
-            columns.add("");
+        if(isNotEmpty(emptyColumns)) {
+            emptyColumns.forEach(c -> table.addCell(cell((c.getName()))));
         }
-
-        columns.forEach(columnTitle -> {
-            table.addCell(cell(columnTitle));
-        });
     }
 
     private void createRows(PdfPTable table, SelectedAddress selectedAddress) {
@@ -162,8 +189,11 @@ public class PdfExportService extends ZipExportService {
                 PastoralVisitStatus status = getPastoralVisitStatus(apartment, season);
                 table.addCell(cell(status != null ? status.getStatus() : ""));
             }
-            for(int i = 0; i < selectedAddress.getEmptyColumnsCount(); i++) {
-                table.addCell(emptyCell(1));
+
+            if(isNotEmpty(selectedAddress.getEmptyColumns())) {
+                selectedAddress.getEmptyColumns().forEach(c -> {
+                    table.addCell(emptyCell(PdfPCell.BOX));
+                });
             }
         }
     }

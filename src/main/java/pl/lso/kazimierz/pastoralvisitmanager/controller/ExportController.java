@@ -34,7 +34,6 @@ public class ExportController {
 
     @PostMapping("/address/bulk/format/{fileFormat}")
     public ResponseEntity exportBulkTo(@RequestBody List<SelectedAddressDto> selectedAddressDtos, @PathVariable("fileFormat") String fileFormat) {
-
         byte[] file = bulkExportService.exportBulk(selectedAddressDtos, fileFormat);
         String fileName = "export" + new Date() + "." + ExportFileFormat.getByName(fileFormat);
 

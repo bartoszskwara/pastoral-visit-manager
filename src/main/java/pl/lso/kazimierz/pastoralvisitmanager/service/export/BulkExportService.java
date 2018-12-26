@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.lso.kazimierz.pastoralvisitmanager.exception.NotFoundException;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SelectedAddress;
 import pl.lso.kazimierz.pastoralvisitmanager.model.dto.address.SelectedAddressDto;
+import pl.lso.kazimierz.pastoralvisitmanager.model.dto.common.EmptyColumn;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Address;
 import pl.lso.kazimierz.pastoralvisitmanager.model.entity.Season;
 import pl.lso.kazimierz.pastoralvisitmanager.repository.AddressRepository;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
@@ -73,11 +75,11 @@ public class BulkExportService {
             Address address = findAddressById(selectedAddressDto.getAddressId(), addresses);
             if(address != null) {
                 List<Season> seasonsForAddress = findSeasonsById(selectedAddressDto.getSeasons(), seasons);
-                if(isNotEmpty(seasonsForAddress) || selectedAddressDto.getEmptyColumnsCount() > 0) {
+                if(isNotEmpty(seasonsForAddress) || isNotEmpty(selectedAddressDto.getEmptyColumns())) {
                     SelectedAddress selectedAddress = new SelectedAddress();
                     selectedAddress.setAddress(address);
                     selectedAddress.setSeasons(seasonsForAddress);
-                    selectedAddress.setEmptyColumnsCount(mapEmptyColumnsCount(selectedAddressDto));
+                    selectedAddress.setEmptyColumns(mapEmptyColumns(selectedAddressDto));
                     result.add(selectedAddress);
                 }
             }
@@ -85,16 +87,22 @@ public class BulkExportService {
         return result;
     }
 
-    private Address findAddressById(Long addressId, List<Address> addresses) {
-        Optional<Address> address = addresses.stream().filter(a -> a.getId().equals(addressId)).findFirst();
-        return address.orElse(null);
-    }
-
     private List<Season> findSeasonsById(List<Long> seasonIds, List<Season> seasons) {
         return seasons.stream().filter(s -> seasonIds.contains(s.getId())).collect(Collectors.toList());
     }
 
-    private Integer mapEmptyColumnsCount(SelectedAddressDto selectedAddressDto) {
-        return selectedAddressDto.getEmptyColumnsCount() != null && selectedAddressDto.getEmptyColumnsCount() > 0 ? selectedAddressDto.getEmptyColumnsCount() : 0;
+    private List<EmptyColumn> mapEmptyColumns(SelectedAddressDto selectedAddressDto) {
+        if(selectedAddressDto == null || isEmpty(selectedAddressDto.getEmptyColumns())) {
+            return emptyList();
+        }
+
+        return selectedAddressDto.getEmptyColumns().stream()
+                .map(c -> EmptyColumn.builder().id(c.getId()).name(c.getName()).build())
+                .collect(Collectors.toList());
+    }
+
+    private Address findAddressById(Long addressId, List<Address> addresses) {
+        Optional<Address> address = addresses.stream().filter(a -> a.getId().equals(addressId)).findFirst();
+        return address.orElse(null);
     }
 }

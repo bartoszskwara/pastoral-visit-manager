@@ -1,6 +1,5 @@
 package pl.lso.kazimierz.pastoralvisitmanager.service.importing;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +19,9 @@ import pl.lso.kazimierz.pastoralvisitmanager.repository.SeasonRepository;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +75,17 @@ public class ImportService {
         }
 
         return response;
+    }
+
+    public byte[] downloadTemplate() {
+        try {
+            return Files.readAllBytes(
+                    Paths.get(getClass().getClassLoader()
+                            .getResource("import_template.csv").toURI()));
+        } catch (IOException | URISyntaxException | NullPointerException e) {
+            e.printStackTrace();
+            throw new NotFoundException("Template not found");
+        }
     }
 
     private void importFile(ImportRequestDto request) {
